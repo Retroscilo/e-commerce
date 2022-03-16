@@ -19,7 +19,7 @@ model Product {
     created_at  DateTime
     categories  Category[]
     Cart        Cart?     @relation(fields: [cart_id], references: [id])
-    cart_id     Int
+    cart_id     Int?
 }
 
 model Category {
@@ -35,7 +35,7 @@ model User {
     firstname   String
     lastname    String
     Cart        Cart?     @relation(fields: [cart_id], references: [id])
-    cart_id     Int
+    cart_id     Int?
 }
 
 model Cart {
