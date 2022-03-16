@@ -19,12 +19,20 @@ export default NextAuth({
     },
     async signIn({ account, user }) {
       if (account.provider === "google") {
-        const { email, name } = user;
-        let userInDb = await prisma.user.findOne({ email });
-        if (userInDb) return true;
+        try {
+          const { email, name } = user;
+          let userInDb = await prisma.user.findUnique({
+            where: {
+              email,
+            },
+          });
+          if (userInDb) return true;
 
-        await prisma.user.createOne({ email, name });
-        return true;
+          await prisma.user.create({ data: { email, name } });
+          return true;
+        } catch (e) {
+          console.log(e);
+        }
       }
     },
   },

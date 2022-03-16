@@ -1,4 +1,4 @@
-const { Prisma } = require('@prisma/client');
+/* const { Prisma } = require('@prisma/client');
 
 const categories = [
   {
@@ -61,3 +61,4 @@ module.exports = {
   products,
   categories,
 };
+ */

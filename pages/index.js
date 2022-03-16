@@ -19,9 +19,10 @@ export default function Home({ products }) {
           🔥 Shop from the hottest items in the world 🔥
         </p>
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
-          {products.map((product) => (
-            <Product product={product} key={product.id} />
-          ))}
+          {products &&
+            products.map((product) => (
+              <Product product={product} key={product.id} />
+            ))}
         </div>
       </main>
 
@@ -31,11 +32,7 @@ export default function Home({ products }) {
 }
 
 export async function getStaticProps(context) {
-  const data = await prisma.product.findMany({
-    include: {
-      category: true,
-    },
-  });
+  const data = await prisma.product.findMany();
 
   //convert decimal value to string to pass through as json
   const products = data.map((product) => ({
