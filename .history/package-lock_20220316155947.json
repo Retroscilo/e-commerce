@@ -1,6 +1,7 @@
 {
   "name": "nextjs-starter",
   "requires": true,
+<<<<<<< HEAD
   "packages": {
     "": {
       "dependencies": {
@@ -4619,7 +4620,9 @@
       }
     }
   },
+=======
   "lockfileVersion": 1,
+>>>>>>> 7312a281789d05b78f5ee8ab9fff55dd79d74c0b
   "dependencies": {
     "@babel/code-frame": {
       "version": "7.16.7",

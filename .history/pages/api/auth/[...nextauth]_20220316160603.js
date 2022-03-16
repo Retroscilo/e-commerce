@@ -23,7 +23,10 @@ export default NextAuth({
         let userInDb = await prisma.user.findOne({ email });
         if (userInDb) return true;
 
-        await prisma.user.createOne({ email, name });
+        await User.create({
+          email,
+          name,
+        });
         return true;
       }
     },

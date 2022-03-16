@@ -15,10 +15,9 @@ model Product {
     description String
     price       Decimal
     image       String
-    category    Category? @relation(fields: [category_id], references: [id])
-    category_id Int
-
-    @@index([category_id])
+    quantity    Int
+    created_at  DateTime
+    categories  Category[]
 }
 
 model Category {
@@ -26,4 +25,11 @@ model Category {
     name        String
     description String
     products    Product[]
+}
+
+model User {
+    id          Int       @id @default(autoincrement())
+    email       String
+    firstname   String
+    lastname    String
 }

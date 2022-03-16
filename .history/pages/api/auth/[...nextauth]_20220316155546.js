@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import prisma from "../../../lib/prisma.js";
 
 export default NextAuth({
   providers: [
@@ -20,10 +19,14 @@ export default NextAuth({
     async signIn({ account, user }) {
       if (account.provider === "google") {
         const { email, name } = user;
-        let userInDb = await prisma.user.findOne({ email });
+        await dbConnect();
+        let userInDb = await User.findOne({ email });
         if (userInDb) return true;
 
-        await prisma.user.createOne({ email, name });
+        await User.create({
+          email,
+          name,
+        });
         return true;
       }
     },
