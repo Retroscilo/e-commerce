@@ -12,8 +12,8 @@ export default function Home({ products }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
       <main className="p-10 mx-auto max-w-4xl">
+        <Header />
         <h1 className="text-6xl font-bold mb-4 text-center">Next.js Starter</h1>
         <p className="mb-20 text-xl text-center">
           🔥 Shop from the hottest items in the world 🔥
