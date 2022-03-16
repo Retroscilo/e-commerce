@@ -29,10 +29,13 @@ export default function Home({ products }) {
 }
 
 export async function getStaticProps(context) {
+  console.log('prisma: ', prisma.product.findMany({
+
+  }));
   const data = await prisma.product.findMany({
-    include: {
-      category: true,
-    },
+    where: {
+      name: 'Cool helmet.'
+    }
   });
 
   //convert decimal value to string to pass through as json

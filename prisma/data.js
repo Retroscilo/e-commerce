@@ -4,17 +4,14 @@ const categories = [
   {
     name: 'Hats',
     description: 'Things you can wear on your head',
-    product_id: [ 1, 2 ]
   },
   {
     name: 'Socks',
     description: 'Things you can wear on your feet',
-    product_id: [ 1, 3 ]
   },
   {
     name: 'Shirts',
     description: 'Things you wear on the top half of your body',
-    product_id: [ 2, 3 ]
   },
 ];
 
@@ -26,7 +23,6 @@ const products = [
     image: '/images/helmet.jpg',
     quantity: 10,
     created_at: '2022-01-01',
-    category_id: [ 1 ],
   },
   {
     name: 'Grey T-Shirt',
@@ -35,7 +31,6 @@ const products = [
     image: '/images/shirt.jpg',
     quantity: 20,
     created_at: '2022-01-01',
-    category_id: [ 3 ],
   },
   {
     name: 'Socks',
@@ -44,7 +39,6 @@ const products = [
     image: '/images/socks.jpg',
     quantity: 10,
     created_at: '2022-01-01',
-    category_id: [ 2 ],
   },
   {
     name: 'Sweatshirt',
@@ -53,11 +47,10 @@ const products = [
     image: '/images/sweatshirt.jpg',
     quantity: 10,
     created_at: '2022-01-01',
-    category_id: [ 1, 2, 3 ],
   },
 ];
 
 module.exports = {
   products,
-  categories,
+  // categories,
 };
