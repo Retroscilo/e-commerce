@@ -1,56 +1,56 @@
-const { Prisma } = require('@prisma/client');
+const { Prisma } = require("@prisma/client");
 
 const categories = [
   {
-    name: 'Hats',
-    description: 'Things you can wear on your head',
+    name: "Hats",
+    description: "Things you can wear on your head",
   },
   {
-    name: 'Socks',
-    description: 'Things you can wear on your feet',
+    name: "Socks",
+    description: "Things you can wear on your feet",
   },
   {
-    name: 'Shirts',
-    description: 'Things you wear on the top half of your body',
+    name: "Shirts",
+    description: "Things you wear on the top half of your body",
   },
 ];
 
 const products = [
   {
-    name: 'Cool helmet.',
-    description: 'A nice helmet to wear on your head',
+    name: "Cool helmet.",
+    description: "A nice helmet to wear on your head",
     price: new Prisma.Decimal(19.95),
-    image: '/images/helmet.jpg',
+    image: "/images/helmet.jpg",
     quantity: 10,
-    created_at: '2022-01-01',
+    created_at: new Date("2022-01-01"),
   },
   {
-    name: 'Grey T-Shirt',
-    description: 'A nice shirt that you can wear on your body',
+    name: "Grey T-Shirt",
+    description: "A nice shirt that you can wear on your body",
     price: new Prisma.Decimal(22.95),
-    image: '/images/shirt.jpg',
+    image: "/images/shirt.jpg",
     quantity: 20,
-    created_at: '2022-01-01',
+    created_at: new Date("2022-01-01"),
   },
   {
-    name: 'Socks',
-    description: 'Cool socks that you can wear on your feet',
+    name: "Socks",
+    description: "Cool socks that you can wear on your feet",
     price: new Prisma.Decimal(12.95),
-    image: '/images/socks.jpg',
+    image: "/images/socks.jpg",
     quantity: 10,
-    created_at: '2022-01-01',
+    created_at: new Date("2022-01-01"),
   },
   {
-    name: 'Sweatshirt',
-    description: 'Cool sweatshirt that you can wear on your body',
+    name: "Sweatshirt",
+    description: "Cool sweatshirt that you can wear on your body",
     price: new Prisma.Decimal(12.95),
-    image: '/images/sweatshirt.jpg',
+    image: "/images/sweatshirt.jpg",
     quantity: 10,
-    created_at: '2022-01-01',
+    created_at: new Date("2022-01-01"),
   },
 ];
 
 module.exports = {
   products,
-  // categories,
+  categories,
 };
