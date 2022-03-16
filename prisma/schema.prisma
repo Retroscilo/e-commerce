@@ -18,6 +18,8 @@ model Product {
     quantity    Int
     created_at  DateTime
     categories  Category[]
+    Cart        Cart?     @relation(fields: [cart_id], references: [id])
+    cart_id     Int
 }
 
 model Category {
@@ -32,4 +34,14 @@ model User {
     email       String
     firstname   String
     lastname    String
+    Cart        Cart?     @relation(fields: [cart_id], references: [id])
+    cart_id     Int
+}
+
+model Cart {
+    id          Int       @id @default(autoincrement())
+    quantity    Int
+    created_at  DateTime
+    users       User[]
+    products    Product[]
 }
