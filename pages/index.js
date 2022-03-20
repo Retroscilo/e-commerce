@@ -33,26 +33,20 @@ export default function Home({ products }) {
 
 export async function getStaticProps(context) {
   /* const data = await prisma.product.findMany(); */
-  const data = await prisma.productCategoryRelation.findMany({
-    where: {
-      category: {
-        id: {
-          in: [1, 2],
-        },
-      },
+  const data = await prisma.product.findMany({
+    include: {
+      categories: true,
     },
   });
-
-  console.log(data);
 
   //convert decimal value to string to pass through as json
   const products = data.map((product) => ({
     ...product,
-    price: product?.price?.toString(),
-    created_at: product?.created_at?.toLocaleDateString("fr-FR"),
-    assignedAt: product?.assignedAt?.toLocaleDateString("fr-FR"),
+    categories: JSON.parse(JSON.stringify(product.categories)),
   }));
+
+  console.log(products);
   return {
-    props: { products },
+    props: { products: JSON.parse(JSON.stringify(products)) },
   };
 }
