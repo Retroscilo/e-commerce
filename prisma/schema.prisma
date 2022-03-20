@@ -10,23 +10,23 @@ datasource db {
 }
 
 model Product {
-    id          Int        @id @default(autoincrement())
+    id          Int                       @id @default(autoincrement())
     name        String
     description String
     price       Decimal
     image       String
     quantity    Int
-    created_at  DateTime
-    categories  Category[]
-    Cart        Cart?      @relation(fields: [cart_id], references: [id])
+    created_at  DateTime                  @default(now())
+    Cart        Cart?                     @relation(fields: [cart_id], references: [id])
     cart_id     Int?
+    categories  ProductCategoryRelation[]
 }
 
 model Category {
-    id          Int       @id @default(autoincrement())
+    id          Int                       @id @default(autoincrement())
     name        String
     description String
-    products    Product[]
+    products    ProductCategoryRelation[]
 }
 
 model User {
@@ -43,4 +43,14 @@ model Cart {
     created_at DateTime
     users      User[]
     products   Product[]
+}
+
+model ProductCategoryRelation {
+    product    Product  @relation(fields: [productId], references: [id])
+    productId  Int // relation scalar field (used in the `@relation` attribute above)
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId Int // relation scalar field (used in the `@relation` attribute above)
+    assignedAt DateTime @default(now())
+
+    @@id([productId, categoryId])
 }

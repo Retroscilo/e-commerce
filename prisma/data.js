@@ -23,6 +23,18 @@ const products = [
     image: "/images/helmet.jpg",
     quantity: 10,
     created_at: new Date("2022-01-01"),
+    categories: {
+      create: [
+        {
+          category: {
+            create: {
+              name: "New category",
+              description: "new description category",
+            },
+          },
+        },
+      ],
+    },
   },
   {
     name: "Grey T-Shirt",
@@ -31,6 +43,17 @@ const products = [
     image: "/images/shirt.jpg",
     quantity: 20,
     created_at: new Date("2022-01-01"),
+    categories: {
+      create: [
+        {
+          category: {
+            connect: {
+              id: 2,
+            },
+          },
+        },
+      ],
+    },
   },
   {
     name: "Socks",
@@ -39,6 +62,17 @@ const products = [
     image: "/images/socks.jpg",
     quantity: 10,
     created_at: new Date("2022-01-01"),
+    categories: {
+      create: [
+        {
+          category: {
+            connect: {
+              id: 3,
+            },
+          },
+        },
+      ],
+    },
   },
   {
     name: "Sweatshirt",
@@ -47,6 +81,17 @@ const products = [
     image: "/images/sweatshirt.jpg",
     quantity: 10,
     created_at: new Date("2022-01-01"),
+    categories: {
+      create: [
+        {
+          category: {
+            connect: {
+              id: 2,
+            },
+          },
+        },
+      ],
+    },
   },
 ];
 
@@ -54,4 +99,3 @@ module.exports = {
   products,
   categories,
 };
- */
