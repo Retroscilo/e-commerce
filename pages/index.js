@@ -3,11 +3,11 @@ import Product from "../components/Product";
 import prisma from "../lib/prisma";
 import Header from "../components/Header";
 
-export default function Home({ products }) {
+export default function Home({ products, categories }) {
   return (
     <div>
       <Head>
-        <title>PlanetScale Next.js Quickstart</title>
+    	<title>PlanetScale Next.js Quickstart</title>
         <meta name="description" content="PlanetScale Quickstart for Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -19,9 +19,10 @@ export default function Home({ products }) {
           🔥 Shop from the hottest items in the world 🔥
         </p>
         <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
-          {products &&
+          {
+		  	products &&
             products.map((product) => (
-              <Product product={product} key={product.id} />
+              <Product categories={categories} product={product} key={product.id} />
             ))}
         </div>
       </main>
@@ -32,21 +33,27 @@ export default function Home({ products }) {
 }
 
 export async function getStaticProps(context) {
-  /* const data = await prisma.product.findMany(); */
-  const data = await prisma.product.findMany({
+  const random = await prisma.product.findMany({
     include: {
       categories: true,
     },
   });
 
   //convert decimal value to string to pass through as json
-  const products = data.map((product) => ({
+  const products = random.map((product) => ({
     ...product,
     categories: JSON.parse(JSON.stringify(product.categories)),
   }));
 
   console.log(products);
+
+  // Get all categories
+  const categories = await prisma.category.findMany({});
+
   return {
-    props: { products: JSON.parse(JSON.stringify(products)) },
+    props: {
+		products: JSON.parse(JSON.stringify(products)),
+		categories: JSON.parse(JSON.stringify(categories))
+	},
   };
 }
