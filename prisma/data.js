@@ -47,8 +47,13 @@ const products = [
       create: [
         {
           category: {
+            connect: { id: 2 },
+          },
+        },
+        {
+          category: {
             connect: {
-              id: 2,
+              id: 3,
             },
           },
         },

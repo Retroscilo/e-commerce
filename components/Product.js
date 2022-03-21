@@ -1,9 +1,11 @@
 import Image from "next/image";
 
-export default function Product({ product }) {
+export default function Product({ product, categories }) {
   const { name, description, price, image } = product;
-  console.log(product);
-  console.log(product.categories);
+
+  const t = product.categories.map((cat) => cat.categoryId);
+  const category = t.map((id) => categories.filter((c) => c.id === id)).flat();
+
   return (
     <div
       className="max-w-[250px] rounded overflow-hidden shadow-lg"
@@ -23,9 +25,14 @@ export default function Product({ product }) {
         <p className="text-gray-900 text-xl">${price}</p>
       </div>
       <div className="px-6 pt-4 pb-2">
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          {product.categories[0].name}
-        </span>
+        {category.map((c, i) => (
+          <span
+            key={i}
+            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+          >
+            {c.name}
+          </span>
+        ))}
       </div>
     </div>
   );
