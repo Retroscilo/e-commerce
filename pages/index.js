@@ -34,8 +34,12 @@ export default function Home({ products }) {
 export async function getStaticProps(context) {
   /* const data = await prisma.product.findMany(); */
   const data = await prisma.product.findMany({
-    include: {
-      categories: true,
+    select: {
+      categories: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 
@@ -45,7 +49,6 @@ export async function getStaticProps(context) {
     categories: JSON.parse(JSON.stringify(product.categories)),
   }));
 
-  console.log(products);
   return {
     props: { products: JSON.parse(JSON.stringify(products)) },
   };
