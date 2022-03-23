@@ -56,7 +56,7 @@ export default function Header() {
 			)}
 			{session?.user && (
 				<>
-					<Grid item sx={{ gap: "20px" }}>
+					<Grid item>
 						{session.user.image && (
 							<Box
 								item
@@ -66,7 +66,7 @@ export default function Header() {
 								className={styles.avatar}
 							/>
 						)}
-						<Stack>
+						<Stack sx={{ px: "15px" }}>
 							<small>Signed in as</small>
 							<strong>
 								{session.user.email ?? session.user.name}
