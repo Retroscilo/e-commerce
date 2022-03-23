@@ -1,15 +1,43 @@
 {
-  "extends": [ "next", "next/core-web-vitals" ],
-  "rules": {
+	"extends": [
+		"next",
+		"next/core-web-vitals"
+	],
+	"rules": {
 		// Use double quotes instead of single quote
 		// Easier in french, and it's consistent with JSON format
-		"quotes": [ "error", "double" ],
-		"indent": [ 2, "tab" , { "SwitchCase": 1, "MemberExpression": 0 } ],
-		"comma-dangle": [ "error", "never" ],
-		"function-paren-newline": [ "error", "consistent" ],
-		"array-bracket-spacing": [ "error", "always" ],
-		"no-tabs": [ 0 ],
-		"no-confusing-arrow": [ 0 ],
-		"no-case-declarations": [ 0 ]
+		"quotes": [
+			"error",
+			"double"
+		],
+		"indent": [
+			4,
+			"tab",
+			{
+				"SwitchCase": 1,
+				"MemberExpression": 0
+			}
+		],
+		"comma-dangle": [
+			"error",
+			"never"
+		],
+		"function-paren-newline": [
+			"error",
+			"consistent"
+		],
+		"array-bracket-spacing": [
+			"error",
+			"always"
+		],
+		"no-tabs": [
+			0
+		],
+		"no-confusing-arrow": [
+			0
+		],
+		"no-case-declarations": [
+			0
+		]
 	}
 }

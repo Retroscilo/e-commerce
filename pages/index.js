@@ -7,12 +7,20 @@ export default function Home({ products, categories }) {
 	return (
 		<div>
 			<Head>
-				<title>PlanetScale Next.js Quickstart</title>
+				<title>(╯°益°)╯彡┻━┻┻━━┻</title>
 				<meta
 					name="description"
 					content="PlanetScale Quickstart for Next.js"
 				/>
+				<link
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+				/>
 				<link rel="icon" href="/favicon.ico" />
+				<link
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/icon?family=Material+Icons"
+				/>
 			</Head>
 
 			<Header />

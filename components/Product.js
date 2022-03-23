@@ -1,14 +1,23 @@
 import Image from "next/image";
+import { useAtom } from "jotai";
+import { _productDialog } from "../store";
 
 export default function Product({ product, categories }) {
 	const { name, description, price, image } = product;
+	const [productDialog, setProductDialog] = useAtom(_productDialog);
+	function handleClick() {
+		setProductDialog({ data: product, open: true });
+	}
 
 	const t = product.categories.map((cat) => cat.categoryId);
-	const category = t.map((id) => categories.filter((c) => c.id === id)).flat();
+	const category = t
+		.map((id) => categories.filter((c) => c.id === id))
+		.flat();
 
 	return (
 		<div
 			className="max-w-[250px] rounded overflow-hidden shadow-lg"
+			onClick={handleClick}
 			key={product.id}
 		>
 			<Image

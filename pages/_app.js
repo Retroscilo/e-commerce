@@ -1,10 +1,18 @@
 import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
+import ProductDialog from "../components/ProductDialog";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 export default function MyApp({ Component, pageProps }) {
-  return (
-    <SessionProvider session={pageProps.session} refetchInterval={0}>
-      <Component {...pageProps} />
-    </SessionProvider>
-  );
+	const theme = createTheme();
+	return (
+		<SessionProvider session={pageProps.session} refetchInterval={0}>
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<Component {...pageProps} />
+				<ProductDialog />
+			</ThemeProvider>
+		</SessionProvider>
+	);
 }
