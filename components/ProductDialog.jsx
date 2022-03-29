@@ -14,19 +14,36 @@ import Image from "next/image";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import GroupedButtons from "./GroupedButton";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 const ProductDialog = ({}) => {
+	const [counter, setCounter] = useState(0);
+
 	const [{ data, open }, setProductDialog] = useAtom(_productDialog);
+	const { data: session } = useSession();
+
 	function handleClose() {
 		setProductDialog({ data, open: false });
 	}
 
-	function handleAdd() {
-		handleClose();
+	async function handleAdd() {
+		try {
+			await fetch("/api/products", {
+				method: "PUT",
+				headers: {
+					"content-type": "Application/JSON",
+				},
+				body: JSON.stringify({
+					cart_id: session.user.cart_id,
+					product_id: data.id,
+					quantity: counter,
+				}),
+			});
+		} catch (e) {
+			console.log(e);
+		}
+		setProductDialog({ data, open: false });
 	}
-
-	const [counter, setCounter] = useState(0);
-	useEffect(() => setCounter(0), [open]);
 
 	return (
 		<Dialog onClose={handleClose} open={open}>

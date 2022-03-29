@@ -4,7 +4,7 @@ import { _productDialog } from "../store";
 
 export default function Product({ product, categories }) {
 	const { name, description, price, image } = product;
-	const [productDialog, setProductDialog] = useAtom(_productDialog);
+	const [_, setProductDialog] = useAtom(_productDialog);
 	function handleClick() {
 		setProductDialog({ data: product, open: true });
 	}

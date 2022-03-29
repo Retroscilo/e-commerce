@@ -82,7 +82,7 @@ export default function Header() {
 								signOut();
 							}}
 						>
-							Sign out
+							Déconnexion
 						</a>
 					</Grid>
 				</>

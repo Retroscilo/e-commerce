@@ -43,13 +43,30 @@ export default NextAuth({
 
 					if (userInDb) return true;
 
-					await prisma.user.create({ data: { email, name } });
+					const newCart = await prisma.cart.create({
+						data: { created_at: new Date() },
+					});
+					await prisma.user.create({
+						data: { email, name, cart_id: newCart.id },
+					});
 
 					return true;
 				} catch (e) {
 					console.log(e);
 				}
 			}
+		},
+		async session({ session }) {
+			let userInDb = await prisma.user.findUnique({
+				where: {
+					email: session.user.email,
+				},
+			});
+
+			session.user.id = userInDb.id;
+			session.user.cart_id = userInDb.cart_id;
+
+			return session;
 		},
 	},
 });
