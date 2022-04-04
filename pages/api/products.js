@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { PrismaClientInitializationError } from "@prisma/client/runtime";
 import prisma from "./../../lib/prisma.js";
 
 export default async function handler(req, res) {
@@ -14,24 +15,71 @@ export default async function handler(req, res) {
 		case "PUT":
 			try {
 				const { cart_id, product_id, quantity } = req.body;
-				const userCart = await prisma.cart.findUnique({
-					where: { id: cart_id },
-				});
-				console.log(userCart);
-				await userCart.update({
-					quantity,
-					products: {
-						create: [
-							{
-								product: {
-									connect: {
-										id: product_id,
-									},
-								},
-							},
-						],
+				const actualData = await prisma.productCartRelation.findUnique({
+					where: {
+						productId_cartId: {
+							productId: product_id,
+							cartId: cart_id,
+						},
 					},
 				});
+
+				await prisma.cart.update({
+					where: { id: cart_id },
+					data: {
+						products: {
+							upsert: [
+								{
+									create: { productId: product_id, quantity },
+									update: {
+										productId: product_id,
+										quantity:
+											actualData.quantity + quantity,
+									},
+									where: {
+										productId_cartId: {
+											productId: product_id,
+											cartId: cart_id,
+										},
+									},
+								},
+							],
+						},
+					},
+				});
+				/* await prisma.cart.upsert({
+					where: { id: cart_id },
+					create: {
+						products: {
+							create: [
+								{
+									quantity,
+									product: {
+										connect: {
+											id: product_id,
+										},
+									},
+								},
+							],
+						},
+					},
+					update: {
+						products: {
+							connectOrCreate: [
+								{
+									create: { productId: product_id, quantity },
+									where: {
+										productId_cartId: {
+											productId: product_id,
+											cartId: cart_id,
+										},
+									},
+								},
+							],
+						},
+					},
+				}); */
+				return res.status(200);
 			} catch (err) {
 				console.error(err);
 				return res.status(500).json({ msg: "Something went wrong" });

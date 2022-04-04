@@ -6,6 +6,7 @@ generator client {
 datasource db {
     provider             = "mysql"
     url                  = env("DATABASE_URL")
+    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
     referentialIntegrity = "prisma"
 }
 
@@ -38,16 +39,15 @@ model User {
 
 model Cart {
     id         Int                   @id @default(autoincrement())
-    quantity   Int?
     created_at DateTime              @default(now())
     users      User[]
     products   ProductCartRelation[]
 }
 
 model ProductCategoryRelation {
-    product    Product  @relation(fields: [productId], references: [id])
+    product    Product  @relation(fields: [productId], references: [id], onUpdate: NoAction)
     productId  Int // relation scalar field (used in the `@relation` attribute above)
-    category   Category @relation(fields: [categoryId], references: [id])
+    category   Category @relation(fields: [categoryId], references: [id], onUpdate: NoAction)
     categoryId Int // relation scalar field (used in the `@relation` attribute above)
     assignedAt DateTime @default(now())
 
@@ -55,10 +55,11 @@ model ProductCategoryRelation {
 }
 
 model ProductCartRelation {
-    product    Product  @relation(fields: [productId], references: [id])
+    product    Product  @relation(fields: [productId], references: [id], onUpdate: NoAction)
     productId  Int // relation scalar field (used in the `@relation` attribute above)
-    cart       Cart     @relation(fields: [cartId], references: [id])
+    cart       Cart     @relation(fields: [cartId], references: [id], onUpdate: NoAction)
     cartId     Int // relation scalar field (used in the `@relation` attribute above)
+    quantity   Int?
     assignedAt DateTime @default(now())
 
     @@id([productId, cartId])

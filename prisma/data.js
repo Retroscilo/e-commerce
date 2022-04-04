@@ -3,16 +3,16 @@ const { Prisma } = require("@prisma/client");
 const categories = [
 	{
 		name: "Hats",
-		description: "Things you can wear on your head"
+		description: "Things you can wear on your head",
 	},
 	{
 		name: "Socks",
-		description: "Things you can wear on your feet"
+		description: "Things you can wear on your feet",
 	},
 	{
 		name: "Shirts",
-		description: "Things you wear on the top half of your body"
-	}
+		description: "Things you wear on the top half of your body",
+	},
 ];
 
 const products = [
@@ -29,12 +29,12 @@ const products = [
 					category: {
 						create: {
 							name: "New category",
-							description: "new description category"
-						}
-					}
-				}
-			]
-		}
+							description: "new description category",
+						},
+					},
+				},
+			],
+		},
 	},
 	{
 		name: "Grey T-Shirt",
@@ -47,18 +47,14 @@ const products = [
 			create: [
 				{
 					category: {
-						connect: { id: 2 }
-					}
+						create: {
+							name: "New category",
+							description: "new description category",
+						},
+					},
 				},
-				{
-					category: {
-						connect: {
-							id: 3
-						}
-					}
-				}
-			]
-		}
+			],
+		},
 	},
 	{
 		name: "Socks",
@@ -71,13 +67,14 @@ const products = [
 			create: [
 				{
 					category: {
-						connect: {
-							id: 3
-						}
-					}
-				}
-			]
-		}
+						create: {
+							name: "New category",
+							description: "new description category",
+						},
+					},
+				},
+			],
+		},
 	},
 	{
 		name: "Sweatshirt",
@@ -90,17 +87,18 @@ const products = [
 			create: [
 				{
 					category: {
-						connect: {
-							id: 2
-						}
-					}
-				}
-			]
-		}
-	}
+						create: {
+							name: "New category",
+							description: "new description category",
+						},
+					},
+				},
+			],
+		},
+	},
 ];
 
 module.exports = {
 	products,
-	categories
+	categories,
 };
