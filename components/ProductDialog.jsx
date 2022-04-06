@@ -39,6 +39,7 @@ const ProductDialog = ({}) => {
 					quantity: counter,
 				}),
 			});
+			handleClose();
 		} catch (e) {
 			console.log(e);
 		}
