@@ -27,7 +27,21 @@ const CartDialog = ({}) => {
 		setCartDialog({ data, open: false });
 	}
 
-	const { data: products, error, mutate } = useSWR("/api/carts", fetcher);
+	const { data: products, error } = useSWR("/api/carts", fetcher);
+
+	async function payment() {
+		try {
+			await fetch("/api/carts", {
+				method: "PUT",
+				headers: {
+					"content-type": "Application/JSON",
+				},
+			});
+		} catch (e) {
+			console.log(e);
+		}
+		setCartDialog({ data, open: false });
+	}
 
 	if (!products || error || !session) return <div>loading</div>;
 	return (
