@@ -27,15 +27,15 @@ const CartDialog = ({}) => {
 
 	async function getData() {
 		try {
-			await fetch("/api/carts", {
-				method: "PUT",
+			const res = await fetch("/api/carts", {
+				method: "GET",
 				headers: {
 					"content-type": "Application/JSON",
-				},
-				body: JSON.stringify({
-					cart_id: data
-				}),
+				}
 			})
+			const products = await res.json();
+			console.log('products: ', products);
+			return products;
 		} catch (e) {
 			console.log(e);
 		}
