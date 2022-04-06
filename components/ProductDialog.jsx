@@ -15,9 +15,12 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import GroupedButtons from "./GroupedButton";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import useSWR from "swr";
+import { fetcher } from "../lib/fetcher";
 
 const ProductDialog = ({}) => {
 	const [counter, setCounter] = useState(0);
+	const { mutate } = useSWR("/api/carts", fetcher);
 
 	const [{ data, open }, setProductDialog] = useAtom(_productDialog);
 	const { data: session } = useSession();
@@ -27,23 +30,20 @@ const ProductDialog = ({}) => {
 	}
 
 	async function handleAdd() {
-		try {
-			await fetch("/api/products", {
-				method: "PUT",
-				headers: {
-					"content-type": "Application/JSON",
-				},
-				body: JSON.stringify({
-					cart_id: session.user.cart_id,
-					product_id: data.id,
-					quantity: counter,
-				}),
-			});
-			handleClose();
-		} catch (e) {
-			console.log(e);
-		}
-		setProductDialog({ data, open: false });
+		const res = await fetch("/api/products", {
+			method: "PUT",
+			headers: {
+				"content-type": "Application/JSON",
+			},
+			body: JSON.stringify({
+				cart_id: session.user.cart_id,
+				product_id: data.id,
+				quantity: counter,
+			}),
+		});
+		console.log("test");
+		mutate();
+		handleClose();
 	}
 
 	return (

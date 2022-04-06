@@ -17,37 +17,31 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { fetcher } from "../lib/fetcher";
+import ProductInCart from "./ProductInCart";
 
 const CartDialog = ({}) => {
 	const [{ data, open }, setCartDialog] = useAtom(_cartDialog);
+	const { data: session } = useSession();
 
 	function handleClose() {
 		setCartDialog({ data, open: false });
 	}
 
-	const { data: products, error } = useSWR("/api/carts", fetcher);
+	const { data: products, error, mutate } = useSWR("/api/carts", fetcher);
 
-	console.log(products);
-	/* async function getData() {
-		try {
-			const res = await fetch("/api/carts", {
-				method: "GET",
-				headers: {
-					"content-type": "Application/JSON",
-				},
-			});
-			const products = await res.json();
-			console.log("products: ", products);
-			return products;
-		} catch (e) {
-			console.log(e);
-		}
-	} */
-
+	if (!products || error || !session) return <div>loading</div>;
 	return (
 		<Dialog onClose={handleClose} open={open}>
 			<DialogTitle>Panier</DialogTitle>
-			<DialogTitle>Coucou</DialogTitle>
+			<DialogContent>
+				<Grid>
+					<Stack>
+						{products.map((product) => (
+							<ProductInCart product={product} />
+						))}
+					</Stack>
+				</Grid>
+			</DialogContent>
 		</Dialog>
 	);
 };

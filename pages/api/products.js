@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 					},
 				});
 
-				await prisma.cart.update({
+				const result = await prisma.cart.update({
 					where: { id: cart_id },
 					data: {
 						products: {
@@ -33,7 +33,9 @@ export default async function handler(req, res) {
 									create: { productId: product_id, quantity },
 									update: {
 										productId: product_id,
-										quantity: actualData ? quantity + actualData.quantity : quantity,
+										quantity: actualData
+											? quantity + actualData.quantity
+											: quantity,
 									},
 									where: {
 										productId_cartId: {
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
 						},
 					},
 				});
-				return res.status(200);
+				return res.status(200).json(result);
 			} catch (err) {
 				console.error(err);
 				return res.status(500).json({ msg: "Something went wrong" });
