@@ -33,8 +33,7 @@ export default async function handler(req, res) {
 									create: { productId: product_id, quantity },
 									update: {
 										productId: product_id,
-										quantity:
-											actualData.quantity + quantity,
+										quantity: actualData ? quantity + actualData.quantity : quantity,
 									},
 									where: {
 										productId_cartId: {
