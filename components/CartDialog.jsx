@@ -24,30 +24,34 @@ const CartDialog = ({}) => {
 	function handleClose() {
 		setCartDialog({ data, open: false });
 	}
-
+	const { data: session } = useSession();
 	const { data: products, error } = useSWR("/api/carts", fetcher);
 
-	console.log(products);
-	/* async function getData() {
+	async function payment() {
 		try {
-			const res = await fetch("/api/carts", {
-				method: "GET",
+			await fetch("/api/carts", {
+				method: "PUT",
 				headers: {
 					"content-type": "Application/JSON",
-				},
-			});
-			const products = await res.json();
-			console.log("products: ", products);
-			return products;
-		} catch (e) {
+				}
+			})
+		} catch(e) {
 			console.log(e);
 		}
-	} */
+		setCartDialog({ data, open: false });
+	}
 
 	return (
 		<Dialog onClose={handleClose} open={open}>
 			<DialogTitle>Panier</DialogTitle>
 			<DialogTitle>Coucou</DialogTitle>
+			<DialogActions>
+				<Button
+					onClick={payment}
+				>
+					Payer
+				</Button>
+			</DialogActions>
 		</Dialog>
 	);
 };
