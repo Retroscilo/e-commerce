@@ -14,6 +14,8 @@ import {
 	Divider,
 	Stack,
 } from "@mui/material";
+import { useAtom } from "jotai";
+import { _cartDialog } from "../store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 // The approach used in this component shows how to build a sign in and sign out
@@ -22,6 +24,12 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 export default function Header() {
 	const { data: session, status } = useSession();
 	const loading = status === "loading";
+
+	const [ _, setCartDialog ] = useAtom(_cartDialog);
+
+	function handleClick() {
+		setCartDialog({ data: session.user.cart_id, open: true });
+	}
 
 	return (
 		<Grid
@@ -72,6 +80,11 @@ export default function Header() {
 								{session.user.email ?? session.user.name}
 							</strong>
 						</Stack>
+					</Grid>
+					<Grid item>
+						<span onClick={handleClick}>
+							Panier
+						</span>
 					</Grid>
 					<Grid item>
 						<a

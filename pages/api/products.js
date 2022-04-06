@@ -47,38 +47,6 @@ export default async function handler(req, res) {
 						},
 					},
 				});
-				/* await prisma.cart.upsert({
-					where: { id: cart_id },
-					create: {
-						products: {
-							create: [
-								{
-									quantity,
-									product: {
-										connect: {
-											id: product_id,
-										},
-									},
-								},
-							],
-						},
-					},
-					update: {
-						products: {
-							connectOrCreate: [
-								{
-									create: { productId: product_id, quantity },
-									where: {
-										productId_cartId: {
-											productId: product_id,
-											cartId: cart_id,
-										},
-									},
-								},
-							],
-						},
-					},
-				}); */
 				return res.status(200);
 			} catch (err) {
 				console.error(err);

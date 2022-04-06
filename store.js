@@ -5,4 +5,9 @@ const _productDialog = atom({
 	data: {},
 });
 
-export { _productDialog };
+const _cartDialog = atom({
+	open: false,
+	data: {},
+});
+
+export { _productDialog, _cartDialog };

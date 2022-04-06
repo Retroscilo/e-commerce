@@ -27,7 +27,6 @@ const ProductDialog = ({}) => {
 	}
 
 	async function handleAdd() {
-		console.log(counter);
 		try {
 			await fetch("/api/products", {
 				method: "PUT",
