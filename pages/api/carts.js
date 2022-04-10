@@ -20,9 +20,26 @@ export default async function handler(req, res) {
 			try {
 				const session = await getSession({ req });
 
-				// User Cart
+				// Get user cart
 				const getUserCart = await prisma.productCartRelation.findMany({})
 				const userCart = getUserCart.filter((product) => product.cartId == session.user.cart_id);
+
+				// Get products infos in user cart
+				const productsList = userCart.map((product) => product.productId);
+				const productCartInfos = await prisma.product.findMany({
+					where: {
+						id: {
+							in: productsList
+						}
+					}
+				});
+
+				// Get if there's enough product for cart
+				const productsQuantityInStock = userCart
+					.map((product, index) => product.quantity <= productCartInfos[index].quantity)
+					.every(value => value);
+
+				if (!productsQuantityInStock) return res.status(405).json({ msg: "There is not enough stock" })
 
 				userCart.map(async (product) => {
 					// Get product infos
