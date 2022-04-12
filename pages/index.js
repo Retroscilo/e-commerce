@@ -2,8 +2,18 @@ import Head from "next/head";
 import Product from "../components/Product";
 import prisma from "../lib/prisma";
 import Header from "../components/Header";
+import useSWR from "swr";
+import { fetcher } from "../lib/fetcher";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
+import { useState } from "react";
 
-export default function Home({ products, categories }) {
+export default function Home({ staticProducts, categories }) {
+	const [products, setProducts] = useState(staticProducts);
+	const { data } = useSWR("/api/products", fetcher);
+
+	useEffect(() => data && setProducts(data.data), [data]);
+
 	return (
 		<div>
 			<Head>
@@ -66,7 +76,7 @@ export async function getStaticProps(context) {
 
 	return {
 		props: {
-			products: JSON.parse(JSON.stringify(products)),
+			staticProducts: JSON.parse(JSON.stringify(products)),
 			categories: JSON.parse(JSON.stringify(categories)),
 		},
 	};

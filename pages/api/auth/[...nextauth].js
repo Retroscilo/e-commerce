@@ -65,6 +65,7 @@ export default NextAuth({
 
 			session.user.id = userInDb.id;
 			session.user.cart_id = userInDb.cart_id;
+			session.user.role = userInDb.role;
 
 			return session;
 		},

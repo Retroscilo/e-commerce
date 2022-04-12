@@ -33,6 +33,7 @@ model User {
     id      Int    @id @default(autoincrement())
     email   String @unique
     name    String
+    role    Int    @default(1)
     Cart    Cart?  @relation(fields: [cart_id], references: [id])
     cart_id Int?
 }

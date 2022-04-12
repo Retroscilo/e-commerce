@@ -6,10 +6,40 @@ export default async function handler(req, res) {
 	switch (req.method) {
 		case "GET":
 			try {
-				// const data = await prisma.product.findMany({});
+				let data = await prisma.product.findMany({
+					include: { categories: true },
+				});
+				data = await Promise.all(
+					data.map(async (product) => {
+						const cats = await Promise.all(
+							product.categories.map(async (cat) => {
+								return prisma.category.findUnique({
+									where: { id: cat.categoryId },
+								});
+							})
+						);
+						return { ...product, categories: cats };
+					})
+				);
 				return res.status(200).json({ data });
 			} catch (err) {
 				console.error(err);
+				return res.status(500).json({ msg: "Something went wrong" });
+			}
+		case "POST":
+			const { product_id, quantity } = req.body;
+			try {
+				const product = await prisma.product.update({
+					where: {
+						id: product_id,
+					},
+					data: {
+						quantity,
+					},
+				});
+				return res.status(200).json(product);
+			} catch (e) {
+				console.log(e);
 				return res.status(500).json({ msg: "Something went wrong" });
 			}
 		case "PUT":

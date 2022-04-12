@@ -9,7 +9,7 @@ export default function Product({ product, categories }) {
 		setProductDialog({ data: product, open: true });
 	}
 
-	const t = product.categories.map((cat) => cat.categoryId);
+	const t = product.categories.map((cat) => cat.categoryId || cat.id);
 	const category = t
 		.map((id) => categories.filter((c) => c.id === id))
 		.flat();
