@@ -12,8 +12,7 @@ import { useSession } from "next-auth/react";
 export default function Home({ staticProducts, categories }) {
 	const [products, setProducts] = useState(staticProducts);
 	const { data } = useSWR("/api/products", fetcher);
-	const { user: session } = useSession();
-	console.log('session: ', session);
+	const { data: session } = useSession();
 
 	useEffect(() => data && setProducts(data.data), [data]);
 
