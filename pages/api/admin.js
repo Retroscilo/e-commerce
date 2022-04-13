@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
 	const session = await getSession({ req });
+	console.log('session: ', session);
 
 	if (!session) return res.status(200).json({ msg: "No user connected" });
 
@@ -31,7 +32,6 @@ export default async function handler(req, res) {
 			try {
 				const { choice, product_id } = req.body;
 
-				// Delete row of choose table
 				switch (choice) {
 					case "Category":
 						await prisma.category.delete({
@@ -39,35 +39,34 @@ export default async function handler(req, res) {
 								id: product_id
 							}
 						});
+						return res.status(200);
 					case "Order":
 						await prisma.productCartRelation.delete({
 							where: {
-								id: product_id
+								productId_cartId: {
+									productId: product_id,
+									cartId: session.user.cartId
+								}
 							}
 						});
+						return res.status(200);
 					case "Product":
 						await prisma.product.delete({
 							where: {
 								id: product_id
 							}
 						});
+						return res.status(200);
 					case "User":
 						await prisma.user.delete({
 							where: {
 								id: product_id
 							}
 						});
+						return res.status(200);
 					default:
 						return res.status(405).json({ msg: "Method not allowed" });
 				}
-
-				// await prisma.product.delete({
-				// 	where: {
-				// 		id: product_id
-				// 	}
-				// })
-
-				// return res.status(200);
 			} catch (err) {
 				console.log(err);
 				return res.status(500).json({ msg: "Something went wrong" });
