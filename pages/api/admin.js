@@ -3,7 +3,7 @@ import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
 	const session = await getSession({ req });
-	console.log('session: ', session);
+	console.log("session: ", session);
 
 	if (!session) return res.status(200).json({ msg: "No user connected" });
 
@@ -14,58 +14,72 @@ export default async function handler(req, res) {
 
 				switch (choice) {
 					case "Category":
-						return res.status(200).json(await prisma.category.findMany({}));
+						return res
+							.status(200)
+							.json(await prisma.category.findMany({}));
 					case "Order":
-						return res.status(200).json(await prisma.productCartRelation.findMany({}))
+						return res
+							.status(200)
+							.json(
+								await prisma.productCartRelation.findMany({})
+							);
 					case "Product":
-						return res.status(200).json(await prisma.product.findMany({}));
+						return res
+							.status(200)
+							.json(await prisma.product.findMany({}));
 					case "User":
-						return res.status(200).json(await prisma.user.findMany({}));
+						return res
+							.status(200)
+							.json(await prisma.user.findMany({}));
 					default:
-						return res.status(405).json({ msg: "Method not allowed" });
+						return res
+							.status(405)
+							.json({ msg: "Method not allowed" });
 				}
-		} catch (err) {
-			console.log(err);
-			return res.status(500).json({ msg: "Something went wrong" });
-		}
+			} catch (err) {
+				console.log(err);
+				return res.status(500).json({ msg: "Something went wrong" });
+			}
 		case "DELETE":
 			try {
 				const { choice, product_id } = req.body;
 
 				switch (choice) {
 					case "Category":
-						await prisma.category.delete({
+						const category = await prisma.category.delete({
 							where: {
-								id: product_id
-							}
+								id: product_id,
+							},
 						});
-						return res.status(200);
+						return res.status(200).json(category);
 					case "Order":
-						await prisma.productCartRelation.delete({
+						const order = await prisma.productCartRelation.delete({
 							where: {
 								productId_cartId: {
 									productId: product_id,
-									cartId: session.user.cartId
-								}
-							}
+									cartId: session.user.cartId,
+								},
+							},
 						});
-						return res.status(200);
+						return res.status(200).json(order);
 					case "Product":
-						await prisma.product.delete({
+						const product = await prisma.product.delete({
 							where: {
-								id: product_id
-							}
+								id: product_id,
+							},
 						});
-						return res.status(200);
+						return res.status(200).json(product);
 					case "User":
-						await prisma.user.delete({
+						const user = await prisma.user.delete({
 							where: {
-								id: product_id
-							}
+								id: product_id,
+							},
 						});
-						return res.status(200);
+						return res.status(200).json(user);
 					default:
-						return res.status(405).json({ msg: "Method not allowed" });
+						return res
+							.status(405)
+							.json({ msg: "Method not allowed" });
 				}
 			} catch (err) {
 				console.log(err);

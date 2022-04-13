@@ -8,12 +8,14 @@ const Admin = ({}) => {
 	const [columns, setColumns] = useState([]);
 
 	const setTab = (values) => {
+		console.log(values);
 		if (values.length === 0) return setColumns([]);
 		setColumns(Object.keys(values[0]));
 		setRows(values);
 	};
 
 	async function getData(choice) {
+		console.log(choice);
 		try {
 			const data = await fetch("/api/admin", {
 				method: "POST",
@@ -28,8 +30,6 @@ const Admin = ({}) => {
 	}
 
 	useEffect(() => getData(value), []);
-
-	useEffect(() => console.log(rows, columns), [rows, columns]);
 
 	const buttonsList = [
 		{ label: "Catégories", value: "Category" },
@@ -47,7 +47,7 @@ const Admin = ({}) => {
 					flexDirection: "column",
 					justifyContent: "center",
 					alignItems: "center",
-					width: "60vh",
+					width: "100%",
 					margin: "auto",
 				}}
 			>
@@ -86,7 +86,12 @@ const Admin = ({}) => {
 				{columns.length === 0 && <div>"aucune donnée disponible"</div>}
 				{columns.length > 0 && (
 					<Grid item>
-						<Tab rows={rows} columns={columns} choice={value} />
+						<Tab
+							rows={rows}
+							columns={columns}
+							choice={value}
+							refresh={getData}
+						/>
 					</Grid>
 				)}
 			</Grid>
