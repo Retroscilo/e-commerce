@@ -44,23 +44,29 @@ const CartDialog = ({}) => {
 	}
 
 	useEffect(() => console.log(products), [products]);
-	console.log(session);
+
 	if (!products || error || !session || !Array.isArray(products))
 		return <div>loading</div>;
+
 	return (
 		<Dialog onClose={handleClose} open={open}>
 			<DialogTitle>Panier</DialogTitle>
 			<DialogContent sx={{ overflow: "visible" }}>
 				<Grid>
 					<Stack>
-						{products.map((product) => (
-							<ProductInCart product={product} />
-						))}
+						{
+							products.map((product, index) => (
+								<ProductInCart
+									key={index}
+									product={product}
+								/>
+							))
+						}
 					</Stack>
 				</Grid>
 			</DialogContent>
 			<DialogActions>
-				<Button>Payer</Button>
+				<Button onClick={() => payment()}>Payer</Button>
 			</DialogActions>
 		</Dialog>
 	);

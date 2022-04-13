@@ -10,4 +10,8 @@ const _cartDialog = atom({
 	data: {},
 });
 
-export { _productDialog, _cartDialog };
+const _admin = atom({
+	data: {}
+})
+
+export { _productDialog, _cartDialog, _admin };

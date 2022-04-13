@@ -64,7 +64,6 @@ const ProductDialog = ({}) => {
 		});
 		mutate();
 	}
-	console.log(data);
 
 	return (
 		<Dialog onClose={handleClose} open={open}>

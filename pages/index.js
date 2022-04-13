@@ -36,6 +36,7 @@ export default function Home({ staticProducts, categories }) {
 			</Head>
 
 			<Header />
+
 			<main className="p-10 mx-auto max-w-4xl">
 				<h1 className="text-6xl font-bold mb-4 text-center">
 					Next.js Starter
@@ -44,9 +45,10 @@ export default function Home({ staticProducts, categories }) {
 					🔥 Shop from the hottest items in the world 🔥
 				</p>
 
-				{
-					session && session.user && session.user.role === 2
-						? <Grid
+				{/* {
+					session && session.user && session.user.role === 2 */}
+						{/* ?  */}
+					<Grid
 						container
 						sx={{
 							alignItems: "center",
@@ -70,8 +72,8 @@ export default function Home({ staticProducts, categories }) {
 							</Link>
 						</Button>
 					</Grid>
-					: null
-				}
+					{/* : null
+				} */}
 
 				<div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
 					{products &&

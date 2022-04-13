@@ -1,5 +1,4 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { PrismaClientInitializationError } from "@prisma/client/runtime";
 import { getSession } from "next-auth/react";
 import prisma from "./../../lib/prisma.js";
 
@@ -39,9 +38,7 @@ export default async function handler(req, res) {
 				const session = await getSession({ req });
 
 				// Get user cart
-				const getUserCart = await prisma.productCartRelation.findMany(
-					{}
-				);
+				const getUserCart = await prisma.productCartRelation.findMany({});
 				const userCart = getUserCart.filter(
 					(product) => product.cartId == session.user.cart_id
 				);
