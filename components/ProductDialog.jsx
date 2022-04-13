@@ -8,19 +8,23 @@ import {
 	Button,
 	DialogActions,
 	Chip,
+	IconButton,
+	Menu,
+	MenuItem,
 } from "@mui/material";
 import { useAtom } from "jotai";
 import { _productDialog } from "../store";
 import Image from "next/image";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import AddIcon from "@mui/icons-material/Add";
 import GroupedButtons from "./GroupedButton";
 import GroupedButtonsStock from "./GroupedButtonsStock";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { fetcher } from "../lib/fetcher";
 
-const ProductDialog = ({}) => {
+const ProductDialog = ({ categories }) => {
 	const [counter, setCounter] = useState(0);
 	const { data: products, mutate } = useSWR("/api/carts", fetcher);
 
@@ -29,6 +33,10 @@ const ProductDialog = ({}) => {
 	const { data: session } = useSession();
 	const [stockCounter, setStockCounter] = useState();
 	useEffect(() => data && setStockCounter(data.quantity), [data]);
+
+	const anchorEl = useRef(null);
+	const [catMenu, setCatMenu] = useState(false);
+
 	function handleClose() {
 		setCounter(0);
 		setProductDialog({ data, open: false });
@@ -102,10 +110,63 @@ const ProductDialog = ({}) => {
 									/>
 								</>
 							)}
-							{data.categories &&
-								data.categories.map((cat) => (
-									<Chip label={cat.name} />
-								))}
+							<Box sx={{ mt: "10px" }}>
+								{data.categories &&
+									data.categories.map((cat) => (
+										<Chip
+											data-category={cat}
+											size="small"
+											label={cat.name}
+											sx={{ mr: 2 }}
+											onDelete={
+												session.user.role === 2
+													? () => handleDelete(cat)
+													: undefined
+											}
+										/>
+									))}
+								{session && session.user.role === 2 && (
+									<>
+										<IconButton
+											size="small"
+											ref={anchorEl}
+											onClick={() => setCatMenu(true)}
+										>
+											<AddIcon />
+										</IconButton>
+										<Menu
+											open={catMenu}
+											anchorEl={anchorEl.current}
+											onClose={() => setCatMenu(false)}
+											anchorOrigin={{
+												vertical: "top",
+												horizontal: "left",
+											}}
+											transformOrigin={{
+												vertical: "top",
+												horizontal: "left",
+											}}
+										>
+											{categories.map(
+												(cat) =>
+													!data.categories
+														.map((c) => c.id)
+														.includes(cat.id) && (
+														<MenuItem
+															onClick={() =>
+																handleCatAdd(
+																	cat
+																)
+															}
+														>
+															{cat.name}
+														</MenuItem>
+													)
+											)}
+										</Menu>
+									</>
+								)}
+							</Box>
 						</Stack>
 					</Grid>
 				</Grid>
@@ -126,7 +187,7 @@ const ProductDialog = ({}) => {
 						disableElevation
 						onClick={modifyStock}
 					>
-						modifier les stocks
+						Modifier les stocks
 					</Button>
 				)}
 			</DialogActions>

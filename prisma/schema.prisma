@@ -65,3 +65,10 @@ model ProductCartRelation {
 
     @@id([productId, cartId])
 }
+
+model Command {
+    id          Int      @id @default(autoincrement())
+    status      String?  @default("ongoing")
+    createdDate DateTime @default(now())
+    updatedDate DateTime @default(now())
+}

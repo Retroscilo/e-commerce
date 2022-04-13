@@ -1,13 +1,14 @@
-import Link from "next/link";
 import Head from "next/head";
-import Product from "../components/Product";
+import Link from "next/link";
+import Product from "../components/Product.jsx";
 import prisma from "../lib/prisma";
 import Header from "../components/Header";
 import useSWR from "swr";
 import { Grid, Button } from "@mui/material";
 import { fetcher } from "../lib/fetcher";
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import ProductDialog from "../components/ProductDialog";
 
 export default function Home({ staticProducts, categories }) {
 	const [products, setProducts] = useState(staticProducts);
@@ -56,17 +57,21 @@ export default function Home({ staticProducts, categories }) {
 							justifyContent: "center",
 							boxShadow: 4,
 							margin: "40px 0px",
-							borderRadius: 2
+							borderRadius: 2,
 						}}
 					>
-						<Button sx={{
-							width: "100%",
-							padding: 1
-						}}>
+						<Button
+							sx={{
+								width: "100%",
+								padding: 1,
+							}}
+						>
 							<Link href="/admin">
-								<span style={{
-									textDecoration: "none"
-								}}>
+								<span
+									style={{
+										textDecoration: "none",
+									}}
+								>
 									Page Admin
 								</span>
 							</Link>
@@ -85,6 +90,7 @@ export default function Home({ staticProducts, categories }) {
 							/>
 						))}
 				</div>
+				<ProductDialog categories={categories} />
 			</main>
 
 			<footer></footer>
