@@ -25,7 +25,7 @@ export default function Header() {
 	const { data: session, status } = useSession();
 	const loading = status === "loading";
 
-	const [ _, setCartDialog ] = useAtom(_cartDialog);
+	const [_, setCartDialog] = useAtom(_cartDialog);
 
 	function handleClick() {
 		setCartDialog({ data: session.user.cart_id, open: true });
@@ -82,9 +82,7 @@ export default function Header() {
 						</Stack>
 					</Grid>
 					<Grid item>
-						<span onClick={handleClick}>
-							Panier
-						</span>
+						<span onClick={handleClick}>Panier</span>
 					</Grid>
 					<Grid item>
 						<a
@@ -98,6 +96,7 @@ export default function Header() {
 							Déconnexion
 						</a>
 					</Grid>
+					<Link href="/admin">admin page</Link>
 				</>
 			)}
 		</Grid>

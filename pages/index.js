@@ -1,12 +1,12 @@
-import Link from "next/link";
 import Head from "next/head";
-import Product from "../components/Product";
+import Link from "next/link";
+import Product from "../components/Product.jsx";
 import prisma from "../lib/prisma";
 import Header from "../components/Header";
 import useSWR from "swr";
 import { Grid, Button } from "@mui/material";
 import { fetcher } from "../lib/fetcher";
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 export default function Home({ staticProducts, categories }) {
@@ -44,9 +44,8 @@ export default function Home({ staticProducts, categories }) {
 					🔥 Shop from the hottest items in the world 🔥
 				</p>
 
-				{
-					session && session.user && session.user.role === 2
-						? <Grid
+				{session && session.user && session.user.role === 2 ? (
+					<Grid
 						container
 						sx={{
 							alignItems: "center",
@@ -54,24 +53,27 @@ export default function Home({ staticProducts, categories }) {
 							justifyContent: "center",
 							boxShadow: 4,
 							margin: "40px 0px",
-							borderRadius: 2
+							borderRadius: 2,
 						}}
 					>
-						<Button sx={{
-							width: "100%",
-							padding: 1
-						}}>
+						<Button
+							sx={{
+								width: "100%",
+								padding: 1,
+							}}
+						>
 							<Link href="/admin">
-								<span style={{
-									textDecoration: "none"
-								}}>
+								<span
+									style={{
+										textDecoration: "none",
+									}}
+								>
 									Page Admin
 								</span>
 							</Link>
 						</Button>
 					</Grid>
-					: null
-				}
+				) : null}
 
 				<div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
 					{products &&

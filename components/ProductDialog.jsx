@@ -8,11 +8,13 @@ import {
 	Button,
 	DialogActions,
 	Chip,
+	IconButton,
 } from "@mui/material";
 import { useAtom } from "jotai";
 import { _productDialog } from "../store";
 import Image from "next/image";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import AddIcon from "@mui/icons-material/Add";
 import GroupedButtons from "./GroupedButton";
 import GroupedButtonsStock from "./GroupedButtonsStock";
 import { useEffect, useState } from "react";
@@ -64,7 +66,34 @@ const ProductDialog = ({}) => {
 		});
 		mutate();
 	}
-	console.log(data);
+
+	async function handleDelete(cat) {
+		const body = {
+			product_id: data.id,
+			category_id: cat.id,
+		};
+
+		await fetch("/api/category", {
+			method: "DELETE",
+			headers: {
+				"content-type": "application/JSON",
+			},
+			body: JSON.stringify(body),
+		});
+		mutateProduct();
+
+		const newCategories = data.categories.filter(
+			(cat) => cat.id !== cat.id
+		);
+		setProductDialog({
+			open,
+			data: { ...data, categories: newCategories },
+		});
+	}
+
+	async function handleCatAdd(cat) {
+		console.log(cat);
+	}
 
 	return (
 		<Dialog onClose={handleClose} open={open}>
@@ -103,10 +132,26 @@ const ProductDialog = ({}) => {
 									/>
 								</>
 							)}
-							{data.categories &&
-								data.categories.map((cat) => (
-									<Chip label={cat.name} />
-								))}
+							<Box sx={{ mt: "10px" }}>
+								{data.categories &&
+									data.categories.map((cat) => (
+										<Chip
+											data-category={cat}
+											size="small"
+											label={cat.name}
+											onDelete={
+												session.user.role === 2
+													? () => handleDelete(cat)
+													: undefined
+											}
+										/>
+									))}
+								{session && session.user.role === 2 && (
+									<IconButton onClick={handleCatAdd}>
+										<AddIcon />
+									</IconButton>
+								)}
+							</Box>
 						</Stack>
 					</Grid>
 				</Grid>
@@ -127,7 +172,7 @@ const ProductDialog = ({}) => {
 						disableElevation
 						onClick={modifyStock}
 					>
-						modifier les stocks
+						Modifier les stocks
 					</Button>
 				)}
 			</DialogActions>
