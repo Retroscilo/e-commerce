@@ -147,22 +147,25 @@ const ProductDialog = ({ categories }) => {
 												horizontal: "left",
 											}}
 										>
-											{categories.map(
-												(cat) =>
-													!data.categories
-														.map((c) => c.id)
-														.includes(cat.id) && (
-														<MenuItem
-															onClick={() =>
-																handleCatAdd(
-																	cat
-																)
-															}
-														>
-															{cat.name}
-														</MenuItem>
-													)
-											)}
+											{data.categories &&
+												categories.map(
+													(cat) =>
+														!data.categories
+															.map((c) => c.id)
+															.includes(
+																cat.id
+															) && (
+															<MenuItem
+																onClick={() =>
+																	handleCatAdd(
+																		cat
+																	)
+																}
+															>
+																{cat.name}
+															</MenuItem>
+														)
+												)}
 										</Menu>
 									</>
 								)}
