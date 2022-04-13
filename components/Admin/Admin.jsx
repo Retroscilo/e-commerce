@@ -3,14 +3,15 @@ import Tab from "./Tab";
 import { useState, useEffect } from "react";
 
 const Admin = ({}) => {
-	const [ value, setValue ] = useState("Category");
-	const [ rows, setRows ] = useState([]);
-	const [ columns, setColumns ] = useState([]);
+	const [value, setValue] = useState("Category");
+	const [rows, setRows] = useState([]);
+	const [columns, setColumns] = useState([]);
 
 	const setTab = (values) => {
+		if (values.length === 0) return setColumns([]);
 		setColumns(Object.keys(values[0]));
 		setRows(values);
-	}
+	};
 
 	async function getData(choice) {
 		try {
@@ -20,21 +21,21 @@ const Admin = ({}) => {
 				body: JSON.stringify({ choice }),
 			});
 			const values = await data.json();
-			values
-				? setTab(values)
-				: null
+			setTab(values);
 		} catch (e) {
 			console.log(e);
 		}
 	}
 
-	useEffect(() => getData(value), [])
+	useEffect(() => getData(value), []);
+
+	useEffect(() => console.log(rows, columns), [rows, columns]);
 
 	const buttonsList = [
-		{ label: "Catégories", value: "Category"},
-		{ label: "Produits", value: "Product"},
-		{ label: "Utilisateurs", value: "User"},
-		{ label: "Commandes passées", value: "Order"}
+		{ label: "Catégories", value: "Category" },
+		{ label: "Produits", value: "Product" },
+		{ label: "Utilisateurs", value: "User" },
+		{ label: "Commandes passées", value: "Order" },
 	];
 
 	return (
@@ -47,7 +48,7 @@ const Admin = ({}) => {
 					justifyContent: "center",
 					alignItems: "center",
 					width: "60vh",
-					margin: "auto"
+					margin: "auto",
 				}}
 			>
 				<Grid
@@ -55,41 +56,42 @@ const Admin = ({}) => {
 					sx={{
 						display: "flex",
 						alignItems: "center",
-						justifyContent: "space-evenly"
+						justifyContent: "space-evenly",
 					}}
 				>
-					{
-						buttonsList.map((button, index) => (
-							<Button
-								key={index}
-								onClick={() => {
-									setValue(button.value);
-									getData(button.value);
-								}}
-								sx={{
-									backgroundColor: value === button.value ? "#4D66E3" : "",
-									color: value === button.value ? "white" : "",
-									margin: "0px 5px",
-									'&:hover': {
-										color: value === button.value ? "#1976d2 !important" : "#1976d2"
-									}
-								}}
-							>
-								{button.label}
-							</Button>
-						))
-					}
+					{buttonsList.map((button, index) => (
+						<Button
+							key={index}
+							onClick={() => {
+								setValue(button.value);
+								getData(button.value);
+							}}
+							sx={{
+								backgroundColor:
+									value === button.value ? "#4D66E3" : "",
+								color: value === button.value ? "white" : "",
+								margin: "0px 5px",
+								"&:hover": {
+									color:
+										value === button.value
+											? "#1976d2 !important"
+											: "#1976d2",
+								},
+							}}
+						>
+							{button.label}
+						</Button>
+					))}
 				</Grid>
-				<Grid item>
-					<Tab
-						rows={rows}
-						columns={columns}
-						choice={value}
-					/>
-				</Grid>
+				{columns.length === 0 && <div>"aucune donnée disponible"</div>}
+				{columns.length > 0 && (
+					<Grid item>
+						<Tab rows={rows} columns={columns} choice={value} />
+					</Grid>
+				)}
 			</Grid>
 		</div>
-	)
+	);
 };
 
 export default Admin;
