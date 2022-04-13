@@ -8,6 +8,7 @@ import { Grid, Button } from "@mui/material";
 import { fetcher } from "../lib/fetcher";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import ProductDialog from "../components/ProductDialog";
 
 export default function Home({ staticProducts, categories }) {
 	const [products, setProducts] = useState(staticProducts);
@@ -85,6 +86,7 @@ export default function Home({ staticProducts, categories }) {
 							/>
 						))}
 				</div>
+				<ProductDialog categories={categories} />
 			</main>
 
 			<footer></footer>

@@ -9,6 +9,8 @@ import {
 	DialogActions,
 	Chip,
 	IconButton,
+	Menu,
+	MenuItem,
 } from "@mui/material";
 import { useAtom } from "jotai";
 import { _productDialog } from "../store";
@@ -17,12 +19,12 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import GroupedButtons from "./GroupedButton";
 import GroupedButtonsStock from "./GroupedButtonsStock";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import { fetcher } from "../lib/fetcher";
 
-const ProductDialog = ({}) => {
+const ProductDialog = ({ categories }) => {
 	const [counter, setCounter] = useState(0);
 	const { data: products, mutate } = useSWR("/api/carts", fetcher);
 
@@ -31,6 +33,10 @@ const ProductDialog = ({}) => {
 	const { data: session } = useSession();
 	const [stockCounter, setStockCounter] = useState();
 	useEffect(() => data && setStockCounter(data.quantity), [data]);
+
+	const anchorEl = useRef(null);
+	const [catMenu, setCatMenu] = useState(false);
+
 	function handleClose() {
 		setCounter(0);
 		setProductDialog({ data, open: false });
@@ -73,6 +79,14 @@ const ProductDialog = ({}) => {
 			category_id: cat.id,
 		};
 
+		const newCategories = data.categories.filter(
+			(cate) => cate.id !== cat.id
+		);
+		setProductDialog({
+			open,
+			data: { ...data, categories: newCategories },
+		});
+
 		await fetch("/api/category", {
 			method: "DELETE",
 			headers: {
@@ -80,19 +94,25 @@ const ProductDialog = ({}) => {
 			},
 			body: JSON.stringify(body),
 		});
-		mutateProduct();
 
-		const newCategories = data.categories.filter(
-			(cat) => cat.id !== cat.id
-		);
-		setProductDialog({
-			open,
-			data: { ...data, categories: newCategories },
-		});
+		mutateProduct();
 	}
 
 	async function handleCatAdd(cat) {
-		console.log(cat);
+		const body = { product_id: data.id, category_id: cat.id };
+		const newCategory = [
+			...data.categories,
+			categories.filter((c) => c.id === cat.id)[0],
+		];
+		setProductDialog({ open, data: { ...data, categories: newCategory } });
+		await fetch("/api/category", {
+			method: "PUT",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify(body),
+		});
+		mutateProduct();
 	}
 
 	return (
@@ -139,6 +159,7 @@ const ProductDialog = ({}) => {
 											data-category={cat}
 											size="small"
 											label={cat.name}
+											sx={{ mr: 2 }}
 											onDelete={
 												session.user.role === 2
 													? () => handleDelete(cat)
@@ -147,9 +168,45 @@ const ProductDialog = ({}) => {
 										/>
 									))}
 								{session && session.user.role === 2 && (
-									<IconButton onClick={handleCatAdd}>
-										<AddIcon />
-									</IconButton>
+									<>
+										<IconButton
+											size="small"
+											ref={anchorEl}
+											onClick={() => setCatMenu(true)}
+										>
+											<AddIcon />
+										</IconButton>
+										<Menu
+											open={catMenu}
+											anchorEl={anchorEl.current}
+											onClose={() => setCatMenu(false)}
+											anchorOrigin={{
+												vertical: "top",
+												horizontal: "left",
+											}}
+											transformOrigin={{
+												vertical: "top",
+												horizontal: "left",
+											}}
+										>
+											{categories.map(
+												(cat) =>
+													!data.categories
+														.map((c) => c.id)
+														.includes(cat.id) && (
+														<MenuItem
+															onClick={() =>
+																handleCatAdd(
+																	cat
+																)
+															}
+														>
+															{cat.name}
+														</MenuItem>
+													)
+											)}
+										</Menu>
+									</>
 								)}
 							</Box>
 						</Stack>

@@ -1,12 +1,34 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { PrismaClientInitializationError } from "@prisma/client/runtime";
 import prisma from "./../../lib/prisma.js";
 
 export default async function handler(req, res) {
 	switch (req.method) {
-		case "DELETE":
-			const { product_id, category_id } = req.body;
+		case "PUT":
 			try {
+				const { product_id, category_id } = req.body;
+				const product = await prisma.product.update({
+					where: { id: product_id },
+					data: {
+						categories: {
+							create: [
+								{
+									category: {
+										connect: { id: category_id },
+									},
+								},
+							],
+						},
+					},
+				});
+				console.log(product);
+				return res.status(200).json("ok");
+			} catch (e) {
+				return res.status(500).json("Something went wrong");
+			}
+
+		case "DELETE":
+			try {
+				const { product_id, category_id } = req.body;
 				const product = await prisma.ProductCategoryRelation.deleteMany(
 					{
 						where: {
