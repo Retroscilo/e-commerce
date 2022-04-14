@@ -10,8 +10,10 @@ const _cartDialog = atom({
 	data: {},
 });
 
-const _admin = atom({
-	data: {}
+const _adminDialog = atom({
+	open: false,
+	choice: "",
+	data: {},
 })
 
-export { _productDialog, _cartDialog, _admin };
+export { _productDialog, _cartDialog, _adminDialog };

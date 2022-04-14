@@ -56,14 +56,7 @@ const Tab = ({ rows, columns, choice, refresh }) => {
 										{value}
 									</TableCell>
 								))}
-								<TableCell
-									className="text-center px-2"
-									sx={{
-										display: "flex",
-										height: "250px",
-										alignItems: "center",
-									}}
-								>
+								<TableCell className="text-center px-2">
 									<EditOutlinedIcon
 										className="mx-1"
 										sx={{ cursor: "pointer" }}

@@ -40,6 +40,15 @@ export default async function handler(req, res) {
 				console.log(err);
 				return res.status(500).json({ msg: "Something went wrong" });
 			}
+		case "PUT":
+			try {
+				const { choice, columns } = req.body;
+
+				break;
+			} catch (err) {
+				console.log(err);
+				return res.status(500).json({ msg: "Something went wrong" });
+			}
 		case "DELETE":
 			try {
 				const { choice, product_id } = req.body;

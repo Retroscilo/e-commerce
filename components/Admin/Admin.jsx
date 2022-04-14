@@ -1,21 +1,28 @@
 import { Grid, Button } from "@mui/material";
 import Tab from "./Tab";
 import { useState, useEffect } from "react";
+import { useAtom } from "jotai";
+import { _adminDialog } from "../../store";
 
 const Admin = ({}) => {
 	const [value, setValue] = useState("Category");
 	const [rows, setRows] = useState([]);
 	const [columns, setColumns] = useState([]);
 
+	const [_, setAdminDialog] = useAtom(_adminDialog);
+
+	function handleClick(choice, columns) {
+		setAdminDialog({ data: columns, choice: choice, open: true });
+	}
+
 	const setTab = (values) => {
-		console.log(values);
 		if (values.length === 0) return setColumns([]);
+
 		setColumns(Object.keys(values[0]));
 		setRows(values);
 	};
 
 	async function getData(choice) {
-		console.log(choice);
 		try {
 			const data = await fetch("/api/admin", {
 				method: "POST",
@@ -83,7 +90,7 @@ const Admin = ({}) => {
 						</Button>
 					))}
 				</Grid>
-				{columns.length === 0 && <div>"aucune donnée disponible"</div>}
+				{columns.length === 0 && <div className="mt-5">"Aucune donnée disponible"</div>}
 				{columns.length > 0 && (
 					<Grid item>
 						<Tab
@@ -94,6 +101,11 @@ const Admin = ({}) => {
 						/>
 					</Grid>
 				)}
+				<Grid item className="mt-4">
+					<Button onClick={() => handleClick(value, columns)}>
+						Ajouter un {value}
+					</Button>
+				</Grid>
 			</Grid>
 		</div>
 	);
