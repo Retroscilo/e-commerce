@@ -19,13 +19,13 @@ const AdminDialog = ({}) => {
 	console.log('choice: ', choice);
 	console.log('data: ', data);
 
-	const columnsToObject = (columns) =>
-		columns.reduce((acc, curr) => ({
-			...acc,
-			[curr]: ""
-		}), {})
+	// const columnsToObject = (columns) =>
+	// 	columns.reduce((acc, curr) => ({
+	// 		...acc,
+	// 		[curr]: ""
+	// 	}), {})
 
-	useEffect(() => setFormValues(columnsToObject(data)), [ choice ])
+	// useEffect(() => setFormValues(columnsToObject(data)), [ choice ])
 
 	function handleClose() {
 		setAdminDialog({ data, open: false });
