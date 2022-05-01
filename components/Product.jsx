@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { _productDialog } from "../store";
+import { useEffect, useState } from "react";
 
 export default function Product({ product, categories }) {
 	const { name, description, price, image } = product;
@@ -8,12 +9,16 @@ export default function Product({ product, categories }) {
 	function handleClick() {
 		setProductDialog({ data: product, open: true });
 	}
+	const [category, setCategory] = useState();
 
-	const t = product.categories.map((cat) => cat.categoryId || cat.id);
-	const category = t
-		.map((id) => categories.filter((c) => c.id === id))
-		.flat();
+	useEffect(() => {
+		const t = product.categories.map((cat) => cat?.categoryId || cat?.id);
+		setCategory(
+			t.map((id) => categories.filter((c) => c.id === id)).flat()
+		);
+	}, [product]);
 
+	if (!category) return "";
 	return (
 		<div
 			className="max-w-[250px] rounded overflow-hidden shadow-lg"

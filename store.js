@@ -14,6 +14,8 @@ const _adminDialog = atom({
 	open: false,
 	choice: "",
 	data: {},
-})
+});
 
-export { _productDialog, _cartDialog, _adminDialog };
+const _selectedCat = atom([]);
+
+export { _productDialog, _cartDialog, _adminDialog, _selectedCat };

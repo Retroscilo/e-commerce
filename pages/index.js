@@ -9,11 +9,15 @@ import { fetcher } from "../lib/fetcher";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import ProductDialog from "../components/ProductDialog";
+import Filters from "../components/Filters";
+import { useAtom } from "jotai";
+import { _selectedCat } from "../store.js";
 
 export default function Home({ staticProducts, categories }) {
 	const [products, setProducts] = useState(staticProducts);
 	const { data } = useSWR("/api/products", fetcher);
 	const { data: session } = useSession();
+	const [selectedCat] = useAtom(_selectedCat);
 
 	useEffect(() => data && setProducts(data.data), [data]);
 
@@ -48,47 +52,57 @@ export default function Home({ staticProducts, categories }) {
 
 				{/* {
 					session && session.user && session.user.role === 2 */}
-						{/* ?  */}
-					<Grid
-						container
+				{/* ?  */}
+				<Grid
+					container
+					sx={{
+						alignItems: "center",
+						display: "flex",
+						justifyContent: "center",
+						boxShadow: 4,
+						margin: "40px 0px",
+						borderRadius: 2,
+					}}
+				>
+					<Button
 						sx={{
-							alignItems: "center",
-							display: "flex",
-							justifyContent: "center",
-							boxShadow: 4,
-							margin: "40px 0px",
-							borderRadius: 2,
+							width: "100%",
+							padding: 1,
 						}}
 					>
-						<Button
-							sx={{
-								width: "100%",
-								padding: 1,
-							}}
-						>
-							<Link href="/admin">
-								<span
-									style={{
-										textDecoration: "none",
-									}}
-								>
-									Page Admin
-								</span>
-							</Link>
-						</Button>
-					</Grid>
-					{/* : null
+						<Link href="/admin">
+							<span
+								style={{
+									textDecoration: "none",
+								}}
+							>
+								Page Admin
+							</span>
+						</Link>
+					</Button>
+				</Grid>
+				<Filters categories={categories} />
+				{/* : null
 				} */}
 
 				<div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-items-center  gap-4">
 					{products &&
-						products.map((product) => (
-							<Product
-								categories={categories}
-								product={product}
-								key={product.id}
-							/>
-						))}
+						products.map((product) => {
+							if (
+								selectedCat.length > 0 &&
+								!product.categories
+									.map((c) => c.id)
+									.some((id) => selectedCat.includes(id))
+							)
+								return "";
+							return (
+								<Product
+									categories={categories}
+									product={product}
+									key={product.id}
+								/>
+							);
+						})}
 				</div>
 				<ProductDialog categories={categories} />
 			</main>
