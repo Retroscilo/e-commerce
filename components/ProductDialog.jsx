@@ -73,6 +73,48 @@ const ProductDialog = ({ categories }) => {
 		mutate();
 	}
 
+	async function handleDelete(cat) {
+		const body = {
+			product_id: data.id,
+			category_id: cat.id,
+		};
+
+		const newCategories = data.categories.filter(
+			(cate) => cate.id !== cat.id
+		);
+		setProductDialog({
+			open,
+			data: { ...data, categories: newCategories },
+		});
+
+		await fetch("/api/category", {
+			method: "DELETE",
+			headers: {
+				"content-type": "application/JSON",
+			},
+			body: JSON.stringify(body),
+		});
+
+		mutateProduct();
+	}
+
+	async function handleCatAdd(cat) {
+		const body = { product_id: data.id, category_id: cat.id };
+		const newCategory = [
+			...data.categories,
+			categories.filter((c) => c.id === cat.id)[0],
+		];
+		setProductDialog({ open, data: { ...data, categories: newCategory } });
+		await fetch("/api/category", {
+			method: "PUT",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify(body),
+		});
+		mutateProduct();
+	}
+
 	return (
 		<Dialog onClose={handleClose} open={open}>
 			<DialogTitle>{data.name}</DialogTitle>
