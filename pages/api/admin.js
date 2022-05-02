@@ -42,7 +42,24 @@ export default async function handler(req, res) {
 			}
 		case "PUT":
 			try {
-				const { choice, columns } = req.body;
+				const { data, choice } = req.body;
+				console.log('data: ', data);
+
+				const dataToInsert = Object.entries(data)
+					.map(value => ({ [value[0]]: value[1] }))
+					.reduce((prev, curr) => ({
+						...prev,
+						[Object.keys(curr)]: Object.values(curr).join("")
+					})
+				, {});
+
+				switch (choice) {
+					case "Category":
+						const category = await prisma.category.create({
+							data: dataToInsert
+						});
+						return res.status(200).json(category);
+				}
 
 				break;
 			} catch (err) {
