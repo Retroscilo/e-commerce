@@ -4,7 +4,7 @@ import Product from "../components/Product.jsx";
 import prisma from "../lib/prisma";
 import Header from "../components/Header";
 import useSWR from "swr";
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, IconButton } from "@mui/material";
 import { fetcher } from "../lib/fetcher";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -12,6 +12,8 @@ import ProductDialog from "../components/ProductDialog";
 import Filters from "../components/Filters";
 import { useAtom } from "jotai";
 import { _selectedCat } from "../store.js";
+import { Box } from "@mui/system";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Home({ staticProducts, categories }) {
 	const [products, setProducts] = useState(staticProducts);
@@ -103,6 +105,7 @@ export default function Home({ staticProducts, categories }) {
 								/>
 							);
 						})}
+					{session.user.role === 2 && <AddProduct />}
 				</div>
 				<ProductDialog categories={categories} />
 			</main>
@@ -135,3 +138,27 @@ export async function getStaticProps(context) {
 		},
 	};
 }
+
+const AddProduct = () => {
+	return (
+		<Box
+			sx={{
+				minHeight: "250px",
+				display: "flex",
+				justifyContent: "center",
+				flexDirection: "column",
+				alignItems: "center",
+				gap: "10px",
+			}}
+		>
+			<IconButton size="large">
+				<AddIcon
+					sx={{ width: "25px", height: "25px" }}
+					size="large"
+					color="primary"
+				/>
+			</IconButton>
+			<div>Ajouter un produit</div>
+		</Box>
+	);
+};
