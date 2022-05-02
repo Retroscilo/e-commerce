@@ -12,6 +12,7 @@ const Filters = ({ categories }) => {
 			))}
 			{selectedCat.length > 0 && (
 				<Chip
+					sx={{ mb: 2 }}
 					label="supprimer les filtres"
 					onClick={() => setSelectedCat([])}
 				/>
@@ -30,7 +31,7 @@ const Cat = ({ cat, selected }) => {
 	}
 	return (
 		<Chip
-			sx={{ mr: 2 }}
+			sx={{ mr: 2, mb: 2 }}
 			variant={selected ? "" : "outlined"}
 			onClick={() => handleSelection(cat.id)}
 			label={cat.name}

@@ -105,7 +105,7 @@ export default function Home({ staticProducts, categories }) {
 								/>
 							);
 						})}
-					{session.user.role === 2 && <AddProduct />}
+					{session?.user?.role === 2 && <AddProduct />}
 				</div>
 				<ProductDialog categories={categories} />
 			</main>
