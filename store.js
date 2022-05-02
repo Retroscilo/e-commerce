@@ -13,7 +13,7 @@ const _cartDialog = atom({
 const _adminDialog = atom({
 	open: false,
 	choice: "",
-	data: {},
+	data: [],
 })
 
 export { _productDialog, _cartDialog, _adminDialog };
