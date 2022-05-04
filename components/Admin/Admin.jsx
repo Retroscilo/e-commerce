@@ -11,8 +11,8 @@ const Admin = ({}) => {
 
 	const [_, setAdminDialog] = useAtom(_adminDialog);
 
-	function handleClick(choice, columns) {
-		setAdminDialog({ data: columns, choice: choice, open: true });
+	function handleClick(choice, columns, type, id) {
+		setAdminDialog({ data: columns, choice: choice, type: type, id: id, open: true });
 	}
 
 	const setTab = (values) => {
@@ -98,14 +98,18 @@ const Admin = ({}) => {
 							columns={columns}
 							choice={value}
 							refresh={getData}
+							handleClick={handleClick}
 						/>
 					</Grid>
 				)}
-				<Grid item className="mt-4">
-					<Button onClick={() => handleClick(value, columns)}>
-						Ajouter un {value}
-					</Button>
-				</Grid>
+				{
+					value !== "User" && value !== "Order" &&
+					<Grid item className="mt-4">
+						<Button onClick={() => handleClick(value, columns, "add", 0)}>
+							Ajouter un {value}
+						</Button>
+					</Grid>
+				}
 			</Grid>
 		</div>
 	);

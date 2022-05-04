@@ -5,7 +5,8 @@ import {
 	Grid,
 	Stack,
 	TextField,
-	Button
+	Button,
+	getAccordionDetailsUtilityClass
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useAtom } from "jotai";
@@ -13,19 +14,33 @@ import { useEffect, useState } from "react";
 import { _adminDialog } from "../../store";
 
 const AdminDialog = ({}) => {
-	const [{ data, open, choice }, setAdminDialog] = useAtom(_adminDialog);
+	const [{ data, open, type, id, choice }, setAdminDialog] = useAtom(_adminDialog);
 	const [ formValues, setFormValues ] = useState({});
+
+	useEffect(() => {
+		if (type === "edit") {
+			await fetch("/api/admin", {
+				method: "PATCH",
+				headers: {
+					"content-type": "Application/JSON",
+				},
+				body: JSON.stringify({
+					data: formValues,
+					choice: choice
+				}),
+			});
+		}
+	}, [type])
 
 	useEffect(() => {
 		if (!data || data.length === 0) return;
 
 		const form = data.reduce((prev, curr) => {
-			if (curr !== "id") return ({
+			if (curr !== "id" && curr !== "created_at") return ({
 				...prev,
 				[curr]: ""
 			})
 		}, {});
-		console.log('form: ', form);
 
 		setFormValues(form);
 	}, [choice, data]);
@@ -34,16 +49,9 @@ const AdminDialog = ({}) => {
 		...formValues,
 		[element]: e.target.value
 	});
-
-	function handleClose() {
-		setAdminDialog({ data, open: false });
-	}
+	const handleClose = () => setAdminDialog({ data, open: false });
 
 	async function handleAdd() {
-		// const newProduct = { ...data, quantity: counter };
-		// mutate([...products, newProduct], false);
-		// handleClose();
-
 		await fetch("/api/admin", {
 			method: "PUT",
 			headers: {
@@ -54,7 +62,6 @@ const AdminDialog = ({}) => {
 				choice: choice
 			}),
 		});
-		// mutate();
 	}
 
 	return (
@@ -64,9 +71,10 @@ const AdminDialog = ({}) => {
 				<Grid>
 					<Stack className="m-2">
 						{
-							Object.keys(data).length !== 0
-								&& data.map((element, index) => {
-									if (element !== "id")
+							type === "add"
+								? Object.keys(data).length !== 0 && data.map((element, index) => {
+									console.log("no")
+									if (element !== "id" && element !== "created_at")
 										return (
 											<TextField
 												key={index}
@@ -77,6 +85,21 @@ const AdminDialog = ({}) => {
 											/>
 										)
 								})
+								: type === "edit"
+								? Object.keys(data).length !== 0 && data.map((element, index) => {
+									console.log("yes");
+									if (element !== "id" && element !== "created_at")
+										return (
+											<TextField
+												key={index}
+												label={element}
+												variant="outlined"
+												className="my-2"
+												onChange={(e) => handleChange(e, element)}
+											/>
+										)
+								})
+								: null
 						}
 						<Button
 							variant="contained"

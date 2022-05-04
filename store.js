@@ -13,6 +13,8 @@ const _cartDialog = atom({
 const _adminDialog = atom({
 	open: false,
 	choice: "",
+	type: "",
+	id: "",
 	data: [],
 });
 

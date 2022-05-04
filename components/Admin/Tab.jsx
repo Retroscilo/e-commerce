@@ -12,11 +12,7 @@ import { useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
-const Tab = ({ rows, columns, choice, refresh }) => {
-	function editProduct() {
-		console.log("Edit");
-		return null;
-	}
+const Tab = ({ rows, columns, choice, refresh, handleClick }) => {
 	async function deleteProduct(choice, product_id) {
 		try {
 			const data = await fetch("/api/admin", {
@@ -60,7 +56,7 @@ const Tab = ({ rows, columns, choice, refresh }) => {
 									<EditOutlinedIcon
 										className="mx-1"
 										sx={{ cursor: "pointer" }}
-										onClick={() => editProduct(row.id)}
+										onClick={() => handleClick(choice, columns, "edit", row.id)}
 									/>
 									<DeleteButton
 										choice={choice}
