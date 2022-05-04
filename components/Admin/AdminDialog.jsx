@@ -6,8 +6,9 @@ import {
 	Stack,
 	TextField,
 	Button,
-	getAccordionDetailsUtilityClass,
+	InputLabel
 } from "@mui/material";
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AddIcon from "@mui/icons-material/Add";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -24,20 +25,16 @@ const AdminDialog = ({}) => {
 		fetcher
 	);
 
-	// useEffect(() => {
-	// 	if (type === "edit") {
-	// 		await fetch("/api/admin", {
-	// 			method: "PATCH",
-	// 			headers: {
-	// 				"content-type": "Application/JSON",
-	// 			},
-	// 			body: JSON.stringify({
-	// 				data: formValues,
-	// 				choice: choice
-	// 			}),
-	// 		});
-	// 	}
-	// }, [type])
+	const [image, setImage] = useState(null);
+	const [createObjectURL, setCreateObjectURL] = useState(null);
+
+	const uploadToClient = (event) => {
+		if (event.target.files && event.target.files[0]) {
+			const i = event.target.files[0];
+			setImage(i);
+			setCreateObjectURL(URL.createObjectURL(i));
+		}
+	};
 
 	useEffect(() => {
 		if (!data || data.length === 0) return;
@@ -57,14 +54,20 @@ const AdminDialog = ({}) => {
 		console.log(data);
 	}, [product]);
 
-	const handleChange = (e, element) =>
-		setFormValues({
-			...formValues,
-			[element]: e.target.value,
-		});
+	const handleChange = (e, element) => setFormValues({
+		...formValues,
+		[element]: e.target.value,
+	});
 	const handleClose = () => setAdminDialog({ data, open: false });
 
-	async function handleAdd() {
+	async function handleAdd(event) {
+		const body = new FormData();
+		body.append("file", image);
+		const response = await fetch("/api/upload", {
+			method: "POST",
+			body
+		});
+
 		await fetch("/api/admin", {
 			method: "PUT",
 			headers: {
@@ -76,6 +79,7 @@ const AdminDialog = ({}) => {
 			}),
 		});
 		mutateProduct();
+		handleClose();
 	}
 
 	return (
@@ -89,8 +93,24 @@ const AdminDialog = ({}) => {
 						{type === "add"
 							? Object.keys(data).length !== 0 &&
 							  data.map((element, index) => {
-									console.log("no");
-									if (
+									if (element === "image") {
+										return (
+											<div className="my-2">
+												<InputLabel>{element}</InputLabel>
+												<input
+													key={index}
+													accept="image/*"
+													id="icon-button-photo"
+													type="file"
+													onChange={(e) => {
+														uploadToClient(e);
+														handleChange(e, element);
+													}}
+												/>
+											</div>
+										)
+									}
+									else if (
 										element !== "id" &&
 										element !== "created_at"
 									)

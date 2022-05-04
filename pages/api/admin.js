@@ -69,7 +69,9 @@ export default async function handler(req, res) {
 					[Object.keys(curr)]: Object.values(curr).join("")
 				})
 				, {});
-				console.log('dataToInsert: ', dataToInsert);
+
+				const imagePath = dataToInsert.image.split("\\");
+				dataToInsert.image = "/images/" + imagePath[imagePath.length - 1];
 
 				switch (choice) {
 					case "Category":
@@ -80,7 +82,6 @@ export default async function handler(req, res) {
 					case "Product":
 						const date = new Date();
 						dataToInsert.created_at = date;
-						console.log('date: ', date);
 						dataToInsert.price = parseInt(dataToInsert.price);
 						dataToInsert.quantity = parseInt(dataToInsert.quantity);
 
