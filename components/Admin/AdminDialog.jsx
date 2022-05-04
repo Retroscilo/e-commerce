@@ -6,16 +6,20 @@ import {
 	Stack,
 	TextField,
 	Button,
-	getAccordionDetailsUtilityClass
+	getAccordionDetailsUtilityClass,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { _adminDialog } from "../../store";
+import useSWR, { mutate } from "swr";
+import { fetcher } from "../../lib/fetcher";
 
 const AdminDialog = ({}) => {
-	const [{ data, open, type, id, choice }, setAdminDialog] = useAtom(_adminDialog);
-	const [ formValues, setFormValues ] = useState({});
+	const [{ data, open, type, id, choice }, setAdminDialog] =
+		useAtom(_adminDialog);
+	const [formValues, setFormValues] = useState({});
+	const { mutate: mutateProduct } = useSWR("/api/products", fetcher);
 
 	// useEffect(() => {
 	// 	if (type === "edit") {
@@ -36,19 +40,21 @@ const AdminDialog = ({}) => {
 		if (!data || data.length === 0) return;
 
 		const form = data.reduce((prev, curr) => {
-			if (curr !== "id" && curr !== "created_at") return ({
-				...prev,
-				[curr]: ""
-			})
+			if (curr !== "id" && curr !== "created_at")
+				return {
+					...prev,
+					[curr]: "",
+				};
 		}, {});
 
 		setFormValues(form);
 	}, [choice, data]);
 
-	const handleChange = (e, element) => setFormValues({
-		...formValues,
-		[element]: e.target.value
-	});
+	const handleChange = (e, element) =>
+		setFormValues({
+			...formValues,
+			[element]: e.target.value,
+		});
 	const handleClose = () => setAdminDialog({ data, open: false });
 
 	async function handleAdd() {
@@ -59,48 +65,61 @@ const AdminDialog = ({}) => {
 			},
 			body: JSON.stringify({
 				data: formValues,
-				choice: choice
+				choice: choice,
 			}),
 		});
+		mutateProduct();
 	}
 
 	return (
 		<Dialog onClose={handleClose} open={open}>
-			<DialogTitle className="text-center">Ajouter un {choice}</DialogTitle>
+			<DialogTitle className="text-center">
+				Ajouter un {choice}
+			</DialogTitle>
 			<DialogContent>
 				<Grid>
 					<Stack className="m-2">
-						{
-							type === "add"
-								? Object.keys(data).length !== 0 && data.map((element, index) => {
-									console.log("no")
-									if (element !== "id" && element !== "created_at")
+						{type === "add"
+							? Object.keys(data).length !== 0 &&
+							  data.map((element, index) => {
+									console.log("no");
+									if (
+										element !== "id" &&
+										element !== "created_at"
+									)
 										return (
 											<TextField
 												key={index}
 												label={element}
 												variant="outlined"
 												className="my-2"
-												onChange={(e) => handleChange(e, element)}
+												onChange={(e) =>
+													handleChange(e, element)
+												}
 											/>
-										)
-								})
-								: type === "edit"
-								? Object.keys(data).length !== 0 && data.map((element, index) => {
+										);
+							  })
+							: type === "edit"
+							? Object.keys(data).length !== 0 &&
+							  data.map((element, index) => {
 									console.log("yes");
-									if (element !== "id" && element !== "created_at")
+									if (
+										element !== "id" &&
+										element !== "created_at"
+									)
 										return (
 											<TextField
 												key={index}
 												label={element}
 												variant="outlined"
 												className="my-2"
-												onChange={(e) => handleChange(e, element)}
+												onChange={(e) =>
+													handleChange(e, element)
+												}
 											/>
-										)
-								})
-								: null
-						}
+										);
+							  })
+							: null}
 						<Button
 							variant="contained"
 							startIcon={<AddIcon />}
