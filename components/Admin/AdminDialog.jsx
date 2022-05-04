@@ -17,20 +17,20 @@ const AdminDialog = ({}) => {
 	const [{ data, open, type, id, choice }, setAdminDialog] = useAtom(_adminDialog);
 	const [ formValues, setFormValues ] = useState({});
 
-	useEffect(() => {
-		if (type === "edit") {
-			await fetch("/api/admin", {
-				method: "PATCH",
-				headers: {
-					"content-type": "Application/JSON",
-				},
-				body: JSON.stringify({
-					data: formValues,
-					choice: choice
-				}),
-			});
-		}
-	}, [type])
+	// useEffect(() => {
+	// 	if (type === "edit") {
+	// 		await fetch("/api/admin", {
+	// 			method: "PATCH",
+	// 			headers: {
+	// 				"content-type": "Application/JSON",
+	// 			},
+	// 			body: JSON.stringify({
+	// 				data: formValues,
+	// 				choice: choice
+	// 			}),
+	// 		});
+	// 	}
+	// }, [type])
 
 	useEffect(() => {
 		if (!data || data.length === 0) return;
