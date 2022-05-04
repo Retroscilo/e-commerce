@@ -3,16 +3,25 @@ import Tab from "./Tab";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { _adminDialog } from "../../store";
+import useSWR from "swr";
+import { fetcher } from "../../lib/fetcher";
 
 const Admin = ({}) => {
 	const [value, setValue] = useState("Category");
 	const [rows, setRows] = useState([]);
 	const [columns, setColumns] = useState([]);
+	const { data: product } = useSWR("/api/products", fetcher);
 
 	const [_, setAdminDialog] = useAtom(_adminDialog);
 
 	function handleClick(choice, columns, type, id) {
-		setAdminDialog({ data: columns, choice: choice, type: type, id: id, open: true });
+		setAdminDialog({
+			data: columns,
+			choice: choice,
+			type: type,
+			id: id,
+			open: true,
+		});
 	}
 
 	const setTab = (values) => {
@@ -36,7 +45,7 @@ const Admin = ({}) => {
 		}
 	}
 
-	useEffect(() => getData(value), []);
+	useEffect(() => getData(value), [product]);
 
 	const buttonsList = [
 		{ label: "Catégories", value: "Category" },
@@ -90,7 +99,9 @@ const Admin = ({}) => {
 						</Button>
 					))}
 				</Grid>
-				{columns.length === 0 && <div className="mt-5">"Aucune donnée disponible"</div>}
+				{columns.length === 0 && (
+					<div className="mt-5">"Aucune donnée disponible"</div>
+				)}
 				{columns.length > 0 && (
 					<Grid item>
 						<Tab
@@ -102,14 +113,17 @@ const Admin = ({}) => {
 						/>
 					</Grid>
 				)}
-				{
-					value !== "User" && value !== "Order" &&
+				{value !== "User" && value !== "Order" && (
 					<Grid item className="mt-4">
-						<Button onClick={() => handleClick(value, columns, "add", 0)}>
+						<Button
+							onClick={() =>
+								handleClick(value, columns, "add", 0)
+							}
+						>
 							Ajouter un {value}
 						</Button>
 					</Grid>
-				}
+				)}
 			</Grid>
 		</div>
 	);

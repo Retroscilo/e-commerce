@@ -19,7 +19,10 @@ const AdminDialog = ({}) => {
 	const [{ data, open, type, id, choice }, setAdminDialog] =
 		useAtom(_adminDialog);
 	const [formValues, setFormValues] = useState({});
-	const { mutate: mutateProduct } = useSWR("/api/products", fetcher);
+	const { data: product, mutate: mutateProduct } = useSWR(
+		"/api/products",
+		fetcher
+	);
 
 	// useEffect(() => {
 	// 	if (type === "edit") {
@@ -49,6 +52,10 @@ const AdminDialog = ({}) => {
 
 		setFormValues(form);
 	}, [choice, data]);
+
+	useEffect(() => {
+		console.log(data);
+	}, [product]);
 
 	const handleChange = (e, element) =>
 		setFormValues({
