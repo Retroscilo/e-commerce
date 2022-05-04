@@ -66,22 +66,24 @@ export default function Home({ staticProducts, categories }) {
 						borderRadius: 2,
 					}}
 				>
-					<Button
-						sx={{
-							width: "100%",
-							padding: 1,
-						}}
-					>
-						<Link href="/admin">
-							<span
-								style={{
-									textDecoration: "none",
-								}}
-							>
-								Page Admin
-							</span>
-						</Link>
-					</Button>
+					{session?.user?.role === 2 && (
+						<Button
+							sx={{
+								width: "100%",
+								padding: 1,
+							}}
+						>
+							<Link href="/admin">
+								<span
+									style={{
+										textDecoration: "none",
+									}}
+								>
+									Page Admin
+								</span>
+							</Link>
+						</Button>
+					)}
 				</Grid>
 				<Filters categories={categories} />
 				{/* : null

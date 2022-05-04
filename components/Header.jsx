@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import styles from "./header.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
 	Grid,
 	CircularProgress,
@@ -24,6 +24,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 export default function Header() {
 	const { data: session, status } = useSession();
 	const loading = status === "loading";
+	const [reload, setReload] = useState(false);
 
 	const [_, setCartDialog] = useAtom(_cartDialog);
 
@@ -95,6 +96,23 @@ export default function Header() {
 						>
 							Déconnexion
 						</a>
+						<Box>
+							{" "}
+							<Button
+								onClick={async () => {
+									setReload(true);
+									await fetch("/api/user", {
+										method: "GET",
+										headers: new Headers(),
+									});
+								}}
+							>
+								Changer mon rôle
+							</Button>{" "}
+							{reload && "rechargez la page !"}
+							(actuellement &nbsp;
+							{session.user.role === 2 ? "admin" : "client"})
+						</Box>
 					</Grid>
 				</>
 			)}
