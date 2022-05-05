@@ -6,9 +6,9 @@ import {
 	Stack,
 	TextField,
 	Button,
-	InputLabel
+	InputLabel,
 } from "@mui/material";
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AddIcon from "@mui/icons-material/Add";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ import useSWR, { mutate } from "swr";
 import { fetcher } from "../../lib/fetcher";
 
 const AdminDialog = ({}) => {
-	const [{ data, open, type, id, choice }, setAdminDialog] =
+	const [{ data, open, type, id, choice, edit }, setAdminDialog] =
 		useAtom(_adminDialog);
 	const [formValues, setFormValues] = useState({});
 	const { data: product, mutate: mutateProduct } = useSWR(
@@ -50,14 +50,11 @@ const AdminDialog = ({}) => {
 		setFormValues(form);
 	}, [choice, data]);
 
-	useEffect(() => {
-		console.log(data);
-	}, [product]);
-
-	const handleChange = (e, element) => setFormValues({
-		...formValues,
-		[element]: e.target.value,
-	});
+	const handleChange = (e, element) =>
+		setFormValues({
+			...formValues,
+			[element]: e.target.value,
+		});
 	const handleClose = () => setAdminDialog({ data, open: false });
 
 	async function handleAdd(event) {
@@ -65,7 +62,7 @@ const AdminDialog = ({}) => {
 		body.append("file", image);
 		const response = await fetch("/api/upload", {
 			method: "POST",
-			body
+			body,
 		});
 
 		await fetch("/api/admin", {
@@ -82,6 +79,10 @@ const AdminDialog = ({}) => {
 		handleClose();
 	}
 
+	async function handleEdit(id, choice, newValue) {
+		const 
+	}
+
 	return (
 		<Dialog onClose={handleClose} open={open}>
 			<DialogTitle className="text-center">
@@ -96,7 +97,9 @@ const AdminDialog = ({}) => {
 									if (element === "image") {
 										return (
 											<div className="my-2">
-												<InputLabel>{element}</InputLabel>
+												<InputLabel>
+													{element}
+												</InputLabel>
 												<input
 													key={index}
 													accept="image/*"
@@ -104,13 +107,15 @@ const AdminDialog = ({}) => {
 													type="file"
 													onChange={(e) => {
 														uploadToClient(e);
-														handleChange(e, element);
+														handleChange(
+															e,
+															element
+														);
 													}}
 												/>
 											</div>
-										)
-									}
-									else if (
+										);
+									} else if (
 										element !== "id" &&
 										element !== "created_at"
 									)

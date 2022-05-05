@@ -9,15 +9,29 @@ export default async function handler(req, res) {
 	switch (req.method) {
 		case "PATCH":
 			try {
-				const { id, choice } = req.body;
+				const { id, choice, newValue } = req.body;
 
 				switch (choice) {
 					case "Category":
-						const category = await prisma.category.findUnique({
+						const category = await prisma.category.update({
 							where: {
-								id: id
-							}
-						})
+								id: id,
+							},
+							data: {
+								name: newValue,
+							},
+						});
+						return res.status(200).json(category);
+					case "Product":
+						const product = await prisma.product.update({
+							where: {
+								id,
+							},
+							data: {
+								name: newValue,
+							},
+						});
+						return res.status(200).json(product);
 				}
 			} catch (err) {
 				console.log(err);
@@ -60,23 +74,26 @@ export default async function handler(req, res) {
 				const { data, choice } = req.body;
 
 				const dataToInsert = Object.entries(data)
-				.map(value => {
-					console.log(value)
-					return ({ [value[0]]: value[1] })
-				})
-				.reduce((prev, curr) => ({
-					...prev,
-					[Object.keys(curr)]: Object.values(curr).join("")
-				})
-				, {});
+					.map((value) => {
+						console.log(value);
+						return { [value[0]]: value[1] };
+					})
+					.reduce(
+						(prev, curr) => ({
+							...prev,
+							[Object.keys(curr)]: Object.values(curr).join(""),
+						}),
+						{}
+					);
 
 				const imagePath = dataToInsert.image.split("\\");
-				dataToInsert.image = "/images/" + imagePath[imagePath.length - 1];
+				dataToInsert.image =
+					"/images/" + imagePath[imagePath.length - 1];
 
 				switch (choice) {
 					case "Category":
 						const category = await prisma.category.create({
-							data: dataToInsert
+							data: dataToInsert,
 						});
 						return res.status(200).json(category);
 					case "Product":
@@ -86,7 +103,7 @@ export default async function handler(req, res) {
 						dataToInsert.quantity = parseInt(dataToInsert.quantity);
 
 						const product = await prisma.product.create({
-							data: dataToInsert
+							data: dataToInsert,
 						});
 						return res.status(200).json(product);
 				}

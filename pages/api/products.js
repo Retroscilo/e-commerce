@@ -1,5 +1,4 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { PrismaClientInitializationError } from "@prisma/client/runtime";
 import prisma from "./../../lib/prisma.js";
 
 export default async function handler(req, res) {

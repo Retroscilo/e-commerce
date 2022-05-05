@@ -14,13 +14,14 @@ const Admin = ({}) => {
 
 	const [_, setAdminDialog] = useAtom(_adminDialog);
 
-	function handleClick(choice, columns, type, id) {
+	function handleClick(choice, columns, type, id, edit = false) {
 		setAdminDialog({
 			data: columns,
 			choice: choice,
 			type: type,
 			id: id,
 			open: true,
+			edit,
 		});
 	}
 
