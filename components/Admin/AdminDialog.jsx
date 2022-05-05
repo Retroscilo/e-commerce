@@ -61,7 +61,6 @@ const AdminDialog = ({}) => {
 	const handleClose = () => setAdminDialog({ data, open: false });
 
 	async function handleAdd(event, choice) {
-		console.log('choice: ', choice);
 		if (choice === "Product") {
 			const body = new FormData();
 
@@ -141,7 +140,6 @@ const AdminDialog = ({}) => {
 							: type === "edit"
 							? Object.keys(data).length !== 0 &&
 							  data.map((element, index) => {
-									console.log("yes");
 									if (
 										element !== "id" &&
 										element !== "created_at"
