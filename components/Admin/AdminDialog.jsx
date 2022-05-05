@@ -24,6 +24,10 @@ const AdminDialog = ({}) => {
 		"/api/products",
 		fetcher
 	);
+	const { data: category, mutate: mutateCategory } = useSWR(
+		"/api/category",
+		fetcher
+	);
 
 	const [image, setImage] = useState(null);
 	const [createObjectURL, setCreateObjectURL] = useState(null);
@@ -50,23 +54,23 @@ const AdminDialog = ({}) => {
 		setFormValues(form);
 	}, [choice, data]);
 
-	useEffect(() => {
-		console.log(data);
-	}, [product]);
-
 	const handleChange = (e, element) => setFormValues({
 		...formValues,
 		[element]: e.target.value,
 	});
 	const handleClose = () => setAdminDialog({ data, open: false });
 
-	async function handleAdd(event) {
-		const body = new FormData();
-		body.append("file", image);
-		const response = await fetch("/api/upload", {
-			method: "POST",
-			body
-		});
+	async function handleAdd(event, choice) {
+		console.log('choice: ', choice);
+		if (choice === "Product") {
+			const body = new FormData();
+
+			body.append("file", image);
+			const response = await fetch("/api/upload", {
+				method: "POST",
+				body
+			});
+		}
 
 		await fetch("/api/admin", {
 			method: "PUT",
@@ -78,7 +82,15 @@ const AdminDialog = ({}) => {
 				choice: choice,
 			}),
 		});
-		mutateProduct();
+
+		switch (choice) {
+			case "Category":
+				mutateCategory();
+				break;
+			case "Product":
+				mutateProduct();
+				break;
+		}
 		handleClose();
 	}
 
@@ -151,7 +163,7 @@ const AdminDialog = ({}) => {
 							variant="contained"
 							startIcon={<AddIcon />}
 							className="mt-2"
-							onClick={handleAdd}
+							onClick={(e) => handleAdd(e, choice)}
 						>
 							Ajouter
 						</Button>

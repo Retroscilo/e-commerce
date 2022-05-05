@@ -1,8 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import json from "formidable/src/plugins/json";
 import prisma from "./../../lib/prisma.js";
 
 export default async function handler(req, res) {
 	switch (req.method) {
+		case "GET":
+			try {
+				let data = await prisma.category.findMany();
+				console.log('data: ', data);
+				return res.status(200).json({ data });
+			} catch (e) {
+				return res.status(500).json("Something went wrong");
+			}
 		case "PUT":
 			try {
 				const { product_id, category_id } = req.body;
@@ -20,7 +29,6 @@ export default async function handler(req, res) {
 						},
 					},
 				});
-				console.log(product);
 				return res.status(200).json("ok");
 			} catch (e) {
 				return res.status(500).json("Something went wrong");
