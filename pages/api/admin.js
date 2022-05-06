@@ -10,7 +10,6 @@ export default async function handler(req, res) {
 		case "PATCH":
 			try {
 				const { id, choice, newValue } = req.body;
-
 				switch (choice) {
 					case "Category":
 						const category = await prisma.category.update({
@@ -74,10 +73,7 @@ export default async function handler(req, res) {
 				const { data, choice } = req.body;
 
 				const dataToInsert = Object.entries(data)
-					.map((value) => {
-						console.log(value);
-						return { [value[0]]: value[1] };
-					})
+					.map((value) => ({ [value[0]]: value[1] }))
 					.reduce(
 						(prev, curr) => ({
 							...prev,
@@ -86,10 +82,6 @@ export default async function handler(req, res) {
 						{}
 					);
 
-				const imagePath = dataToInsert.image.split("\\");
-				dataToInsert.image =
-					"/images/" + imagePath[imagePath.length - 1];
-
 				switch (choice) {
 					case "Category":
 						const category = await prisma.category.create({
@@ -97,7 +89,11 @@ export default async function handler(req, res) {
 						});
 						return res.status(200).json(category);
 					case "Product":
+						const imagePath = dataToInsert.image.split("\\");
 						const date = new Date();
+
+						dataToInsert.image =
+							"/images/" + imagePath[imagePath.length - 1];
 						dataToInsert.created_at = date;
 						dataToInsert.price = parseInt(dataToInsert.price);
 						dataToInsert.quantity = parseInt(dataToInsert.quantity);

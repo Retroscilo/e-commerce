@@ -16,11 +16,11 @@ export default async (req, res) => {
 
         form.parse(req, (err, fields, files) => {
             if (err) return reject(err)
-            console.log(fields, files)
-            console.log(files.file.filepath)
+
             var oldPath = files.file.filepath;
             var newPath = `./public/images/${files.file.originalFilename}`;
-            mv(oldPath, newPath, function(err) {});
+
+			mv(oldPath, newPath, function(err) {});
             res.status(200).json({ fields, files })
         })
     })

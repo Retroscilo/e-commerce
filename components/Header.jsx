@@ -15,8 +15,11 @@ import {
 	Stack,
 } from "@mui/material";
 import { useAtom } from "jotai";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+
 import { _cartDialog } from "../store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { textAlign } from "@mui/system";
 
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
@@ -83,7 +86,17 @@ export default function Header() {
 						</Stack>
 					</Grid>
 					<Grid item>
-						<span onClick={handleClick}>Panier</span>
+						<span
+							style={{
+								alignItems: "center",
+								display: "flex",
+								justifyContent: "center",
+								cursor: "pointer"
+							}}
+							onClick={handleClick}>
+							<ShoppingCartIcon className={"mr-3"} />
+							Panier
+						</span>
 					</Grid>
 					<Grid item>
 						<a

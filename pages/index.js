@@ -46,10 +46,13 @@ export default function Home({ staticProducts, categories }) {
 
 			<main className="p-10 mx-auto max-w-4xl">
 				<h1 className="text-6xl font-bold mb-4 text-center">
-					Next.js Starter
+					(╯°益°)╯彡┻━┻┻━━┻
 				</h1>
-				<p className="mb-10 text-xl text-center">
-					🔥 Shop from the hottest items in the world 🔥
+				<p className="mb-5 mt-10 text-xl text-center" style={{ fontSize: "25px" }}>
+					🔥 La meilleure boutique de jeux de sociétés du moment ! 🔥 <br />
+				</p>
+				<p className="mb-10 mt-10 text-xl text-center">
+					Si jamais vous souhaitez jouer avec des amis, venez découvrir une vaste panoplie de jeux divers et variés ! De bons moments entre amis vous seront assurés (on l'espère !)
 				</p>
 
 				{/* {

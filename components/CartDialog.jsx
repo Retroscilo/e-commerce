@@ -8,10 +8,10 @@ import {
 	Button,
 	DialogActions,
 } from "@mui/material";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAtom } from "jotai";
 import { _cartDialog } from "../store";
 import Image from "next/image";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import GroupedButtons from "./GroupedButton";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";

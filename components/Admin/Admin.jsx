@@ -11,6 +11,7 @@ const Admin = ({}) => {
 	const [rows, setRows] = useState([]);
 	const [columns, setColumns] = useState([]);
 	const { data: product } = useSWR("/api/products", fetcher);
+	const { data: category } = useSWR("/api/category", fetcher);
 
 	const [_, setAdminDialog] = useAtom(_adminDialog);
 
@@ -46,7 +47,7 @@ const Admin = ({}) => {
 		}
 	}
 
-	useEffect(() => getData(value), [product]);
+	useEffect(() => getData(value), [product, category]);
 
 	const buttonsList = [
 		{ label: "Catégories", value: "Category" },
