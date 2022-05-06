@@ -7,38 +7,38 @@ export default async function handler(req, res) {
 	if (!session) return res.status(200).json({ msg: "No user connected" });
 
 	switch (req.method) {
-		case "PATCH":
-			try {
-				const { id, choice, newValue } = req.body;
-				switch (choice) {
-					case "Category":
-						const category = await prisma.category.update({
-							where: {
-								id: id,
-							},
-							data: {
-								name: newValue,
-							},
-						});
-						return res.status(200).json(category);
-					case "Product":
-						const product = await prisma.product.update({
-							where: {
-								id,
-							},
-							data: {
-								name: newValue,
-							},
-						});
-						return res.status(200).json(product);
-				}
-			} catch (err) {
-				console.log(err);
-				return res.status(500).json({ msg: "Something went wrong" });
-			}
 		case "POST":
 			try {
-				const { choice } = req.body;
+				const { id, choice, newValue } = req.body;
+
+				if (id) {
+					newValue.quantity = parseInt(newValue.quantity);
+					const imagePath = newValue.image.split("\\");
+					newValue.image =
+						"/images/" + imagePath[imagePath.length - 1];
+					switch (choice) {
+						case "Category":
+							const category = await prisma.category.update({
+								where: {
+									id: id,
+								},
+								data: {
+									...newValue,
+								},
+							});
+							return res.status(200).json(category);
+						case "Product":
+							const product = await prisma.product.update({
+								where: {
+									id,
+								},
+								data: {
+									...newValue,
+								},
+							});
+							return res.status(200).json(product);
+					}
+				}
 
 				switch (choice) {
 					case "Category":

@@ -6,7 +6,6 @@ export default async function handler(req, res) {
 		case "GET":
 			try {
 				let data = await prisma.category.findMany();
-				console.log("data: ", data);
 				return res.status(200).json({ data });
 			} catch (e) {
 				return res.status(500).json("Something went wrong");

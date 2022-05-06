@@ -17,7 +17,7 @@ import useSWR, { mutate } from "swr";
 import { fetcher } from "../../lib/fetcher";
 
 const AdminDialog = ({}) => {
-	const [{ data, open, type, id, choice, edit }, setAdminDialog] =
+	const [{ data, open, type, id, choice }, setAdminDialog] =
 		useAtom(_adminDialog);
 	const [formValues, setFormValues] = useState({});
 	const { data: product, mutate: mutateProduct } = useSWR(
@@ -54,15 +54,15 @@ const AdminDialog = ({}) => {
 		setFormValues(form);
 	}, [choice, data]);
 
-	const handleChange = (e, element) =>
+	const handleChange = (e, element) => {
 		setFormValues({
 			...formValues,
 			[element]: e.target.value,
 		});
+	};
 	const handleClose = () => setAdminDialog({ data, open: false });
 
 	async function handleAdd(event, choice) {
-		console.log("choice: ", choice);
 		if (choice === "Product") {
 			const body = new FormData();
 
@@ -95,8 +95,38 @@ const AdminDialog = ({}) => {
 		handleClose();
 	}
 
-	handleEdit(id, newValue, choice) {
+	async function handleEdit(id, choice) {
+		if (choice === "Product") {
+			const body = new FormData();
 
+			body.append("file", image);
+			const response = await fetch("/api/upload", {
+				method: "POST",
+				body,
+			});
+		}
+
+		await fetch("/api/admin", {
+			method: "POST",
+			headers: {
+				"content-type": "Application/JSON",
+			},
+			body: JSON.stringify({
+				newValue: formValues,
+				choice,
+				id,
+			}),
+		});
+
+		switch (choice) {
+			case "Category":
+				mutateCategory();
+				break;
+			case "Product":
+				mutateProduct();
+				break;
+		}
+		handleClose();
 	}
 
 	return (
@@ -150,8 +180,28 @@ const AdminDialog = ({}) => {
 							: type === "edit"
 							? Object.keys(data).length !== 0 &&
 							  data.map((element, index) => {
-									console.log("yes");
-									if (
+									if (element === "image") {
+										return (
+											<div className="my-2">
+												<InputLabel>
+													{element}
+												</InputLabel>
+												<input
+													key={index}
+													accept="image/*"
+													id="icon-button-photo"
+													type="file"
+													onChange={(e) => {
+														uploadToClient(e);
+														handleChange(
+															e,
+															element
+														);
+													}}
+												/>
+											</div>
+										);
+									} else if (
 										element !== "id" &&
 										element !== "created_at"
 									)
@@ -172,7 +222,11 @@ const AdminDialog = ({}) => {
 							variant="contained"
 							startIcon={<AddIcon />}
 							className="mt-2"
-							onClick={(e) => handleAdd(e, choice)}
+							onClick={(e) => {
+								type === "edit"
+									? handleEdit(id, choice)
+									: handleAdd(e, choice);
+							}}
 						>
 							Ajouter
 						</Button>
