@@ -65,7 +65,7 @@ const ProductDialog = ({ categories }) => {
 				"content-type": "Application/JSON",
 			},
 			body: JSON.stringify({
-				cart_id: session.user.cart_id,
+				cart_id: session?.user?.cart_id,
 				product_id: data.id,
 				quantity: counter,
 			}),
@@ -142,7 +142,7 @@ const ProductDialog = ({ categories }) => {
 									max={data.quantity}
 								/>
 							</Box>
-							{session && session.user.role === 2 && (
+							{session && session?.user?.role === 2 && (
 								<>
 									<Box>Editer les stocks</Box>
 									<GroupedButtonsStock
@@ -161,13 +161,13 @@ const ProductDialog = ({ categories }) => {
 											label={cat.name}
 											sx={{ mr: 2 }}
 											onDelete={
-												session.user.role === 2
+												session?.user?.role === 2
 													? () => handleDelete(cat)
 													: undefined
 											}
 										/>
 									))}
-								{session && session.user.role === 2 && (
+								{session && session?.user?.role === 2 && (
 									<>
 										<IconButton
 											size="small"
@@ -226,7 +226,7 @@ const ProductDialog = ({ categories }) => {
 				>
 					Ajouter au panier
 				</Button>
-				{session && session.user.role === 2 && (
+				{session && session?.user?.role === 2 && (
 					<Button
 						variant="contained"
 						disableElevation
