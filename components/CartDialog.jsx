@@ -8,7 +8,7 @@ import {
 	Button,
 	DialogActions,
 } from "@mui/material";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useAtom } from "jotai";
 import { _cartDialog } from "../store";
 import Image from "next/image";
@@ -46,7 +46,7 @@ const CartDialog = ({}) => {
 	useEffect(() => console.log(products), [products]);
 
 	if (!products || error || !session || !Array.isArray(products))
-		return <div>loading</div>;
+		return <div> </div>;
 
 	return (
 		<Dialog onClose={handleClose} open={open}>
@@ -54,14 +54,9 @@ const CartDialog = ({}) => {
 			<DialogContent sx={{ overflow: "visible" }}>
 				<Grid>
 					<Stack>
-						{
-							products.map((product, index) => (
-								<ProductInCart
-									key={index}
-									product={product}
-								/>
-							))
-						}
+						{products.map((product, index) => (
+							<ProductInCart key={index} product={product} />
+						))}
 					</Stack>
 				</Grid>
 			</DialogContent>

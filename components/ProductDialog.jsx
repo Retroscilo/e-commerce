@@ -221,7 +221,7 @@ const ProductDialog = ({ categories }) => {
 					variant="contained"
 					disableElevation
 					endIcon={<AddShoppingCartIcon />}
-					disabled={!counter > 0}
+					disabled={!counter > 0 || !session}
 					onClick={handleAdd}
 				>
 					Ajouter au panier
